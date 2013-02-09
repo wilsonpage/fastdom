@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>title</title>
+<style>
+
+
+
+</style>
+</head>
+<body>
+	<div class='div1'></div>
+	<div class='div2'></div>
+	<div class='div3'></div>
+	<script type="text/javascript" src="../lib/dombatcher.js"></script>
+	<script>
+
+
+	var batch = new DomBatcher();
+
+	batch.write(function() {
+		console.log('write1');
+	});
+
+	batch.read(function() {
+		console.log('read1');
+	});
+
+	batch.read(function() {
+		console.log('read1');
+	});
+
+	batch.write(function() {
+		console.log('write1');
+	});
+
+
+	setTimeout(function() {
+		var batch = new DomBatcher();
+
+		batch.write(function() {
+			console.log('write2');
+		});
+
+		batch.read(function() {
+			console.log('read2');
+		});
+
+		batch.read(function() {
+			console.log('read2');
+		});
+
+		batch.write(function() {
+			console.log('write2');
+		});
+	}, 400);
+	</script>
+</body>
+</html>
