@@ -10,50 +10,48 @@
 </style>
 </head>
 <body>
-	<div class='div1'></div>
-	<div class='div2'></div>
-	<div class='div3'></div>
-	<script type="text/javascript" src="../lib/dombatcher.js"></script>
-	<script>
+  <div class='div1'></div>
+  <div class='div2'></div>
+  <div class='div3'></div>
+  <script type="text/javascript" src="../lib/dombatcher.js"></script>
+  <script>
 
 
+  domBatch.write(function() {
+    console.log('write1');
+  });
+
+  domBatch.read(function() {
+    console.log('read1');
+  });
+
+  domBatch.read(function() {
+    console.log('read1');
+  });
+
+  domBatch.write(function() {
+    console.log('write1');
+  });
 
 
-	domBatch.write(function() {
-		console.log('write1');
-	});
+  setTimeout(function() {
 
-	domBatch.read(function() {
-		console.log('read1');
-	});
+    domBatch.write(function() {
+      console.log('write2');
+    });
 
-	domBatch.read(function() {
-		console.log('read1');
-	});
+    domBatch.read(function() {
+      console.log('read2');
+    });
 
-	domBatch.write(function() {
-		console.log('write1');
-	});
+    domBatch.read(function() {
+      console.log('read2');
+    });
 
-
-	setTimeout(function() {
-
-		domBatch.write(function() {
-			console.log('write2');
-		});
-
-		domBatch.read(function() {
-			console.log('read2');
-		});
-
-		domBatch.read(function() {
-			console.log('read2');
-		});
-
-		domBatch.write(function() {
-			console.log('write2');
-		});
-	}, 400);
-	</script>
+    domBatch.write(function() {
+      console.log('write2');
+    });
+  }, 400);
+  </script>
 </body>
 </html>
