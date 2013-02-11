@@ -17,41 +17,40 @@
 	<script>
 
 
-	var batch = new DomBatcher();
 
-	batch.write(function() {
+
+	domBatch.write(function() {
 		console.log('write1');
 	});
 
-	batch.read(function() {
+	domBatch.read(function() {
 		console.log('read1');
 	});
 
-	batch.read(function() {
+	domBatch.read(function() {
 		console.log('read1');
 	});
 
-	batch.write(function() {
+	domBatch.write(function() {
 		console.log('write1');
 	});
 
 
 	setTimeout(function() {
-		var batch = new DomBatcher();
 
-		batch.write(function() {
+		domBatch.write(function() {
 			console.log('write2');
 		});
 
-		batch.read(function() {
+		domBatch.read(function() {
 			console.log('read2');
 		});
 
-		batch.read(function() {
+		domBatch.read(function() {
 			console.log('read2');
 		});
 
-		batch.write(function() {
+		domBatch.write(function() {
 			console.log('write2');
 		});
 	}, 400);
