@@ -6,5 +6,8 @@
   "scripts": [
     "lib/dom-batch.js"
   ],
+  "ignore": [
+  	"examples/"
+  ],
   "license": "MIT"
 }
