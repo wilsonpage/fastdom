@@ -1,0 +1,19 @@
+{
+  "name": "dom-batch",
+  "description": "Batches functions into a single async batch",
+  "version": "0.0.1",
+  "main": "lib/dom-batch.js",
+  "scripts": [
+    "lib/dom-batch.js"
+  ],
+  "homepage": "https://github.com/wilsonpage/dom-batch",
+  "author": {
+    "name": "Wilson Page",
+    "email": "wilsonpage@me.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/wilsonpage/fruitmachine.git"
+  },
+  "license": "MIT"
+}
