@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "main": "lib/dom-batch.js",
   "scripts": [
-    "lib/async-batch.js"
+    "lib/dom-batch.js"
   ],
   "license": "MIT"
 }
