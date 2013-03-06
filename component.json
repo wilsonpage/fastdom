@@ -1,0 +1,10 @@
+{
+  "name": "dom-batch",
+  "description": "Batches functions into a single async batch",
+  "version": "0.0.1",
+  "main": "lib/dom-batch.js",
+  "scripts": [
+    "lib/async-batch.js"
+  ],
+  "license": "MIT"
+}
