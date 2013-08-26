@@ -1,6 +1,6 @@
 {
   "name": "dom-batch",
-  "description": "Batches functions into a single async batch",
+  "description": "Eliminates layout thrashing by batching DOM read/write interactions",
   "version": "0.3.0",
   "main": "lib/dom-batch.js",
   "scripts": [
