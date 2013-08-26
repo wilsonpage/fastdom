@@ -29,6 +29,50 @@ dom.write(function() {
 <DOM Write>
 ```
 
+## API
+
+### DomBatch#read(callback)
+
+Schedules a task for the 'read' queue.
+
+```js
+dom.read(function() {
+  var width = element.clientWidth;
+});
+```
+
+### DomBatch#write(callback)
+
+Schedules a task for the 'write' queue.
+
+```js
+dom.write(function() {
+  element.style.width = width + 'px';
+});
+```
+
+### DomBatch#clearRead(callback)
+
+Removes a task from the 'read' queue.
+
+```js
+var fn = function(){};
+
+dom.read(fn);
+dom.clearRead(fn);
+```
+
+### DomBatch#clearWrite(callback)
+
+Removes a task from the 'write' queue.
+
+```js
+var fn = function(){};
+
+dom.write(fn);
+dom.clearWrite(fn);
+```
+
 ## Tests
 
 #### With PhantomJS
