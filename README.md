@@ -31,7 +31,7 @@ dom.write(function() {
 
 ## API
 
-### DomBatch#read(callback)
+### DomBatch#read(callback[, context])
 
 Schedules a task for the 'read' queue.
 
@@ -41,7 +41,7 @@ dom.read(function() {
 });
 ```
 
-### DomBatch#write(callback)
+### DomBatch#write(callback[, context])
 
 Schedules a task for the 'write' queue.
 
