@@ -1,4 +1,4 @@
-# dom-batch [![Build Status](https://travis-ci.org/ftlabs/dom-batch.png?branch=master)](https://travis-ci.org/ftlabs/dom-batch)
+# dom-batch [![Build Status](https://travis-ci.org/wilsonpage/dom-batch.png?branch=master)](https://travis-ci.org/wilsonpage/dom-batch)
 
 Eliminates layout thrashing by batching DOM read/write interactions.
 
