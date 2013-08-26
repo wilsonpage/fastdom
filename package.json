@@ -1,6 +1,6 @@
 {
   "name": "dom-batch",
-  "description": "Batches DOM reads and writes together for optimum performance",
+  "description": "Eliminates layout thrashing by batching DOM read/write interactions",
   "version": "0.3.0",
   "main": "lib/dom-batch.js",
   "scripts": [
@@ -20,6 +20,6 @@
     "buster": "~0.6.2",
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.8",
-    "grunt-buster": "~0.1.2"
+    "grunt-buster": "~0.2.1"
   }
 }
