@@ -1,3 +1,4 @@
+var DomBatch = dom.constructor;
 
 buster.testCase('DomBatch', {
 
