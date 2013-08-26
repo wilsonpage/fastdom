@@ -38,12 +38,12 @@ $ npm install dom-batch
 or
 
 ```
-bower install dom-batch
+$ bower install dom-batch
 ```
 
 or
 
-Old fashioned [download](http://github.com/wilsonpage/dom-batch/raw/master/lib/dom-batch.js)
+Old fashioned [download](http://github.com/wilsonpage/dom-batch/raw/master/lib/dom-batch.js).
 
 ## API
 
