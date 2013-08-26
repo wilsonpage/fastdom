@@ -1,7 +1,7 @@
 {
   "name": "dom-batch",
   "description": "Batches functions into a single async batch",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "main": "lib/dom-batch.js",
   "scripts": [
     "lib/dom-batch.js"
