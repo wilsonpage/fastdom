@@ -49,9 +49,9 @@ Old fashioned [download](http://github.com/wilsonpage/dom-batch/raw/master/lib/d
 
 ## How it works
 
-DOM-Batch works as a regulatory layer between your app/library and the DOM.
+DOM-Batch works as a regulatory layer between your app/library and the DOM. By batching DOM access we avoid unnecessary document reflows and speed up layout perfomance dramatically.
 
-Each read/write job is added to a corresponding read/write queue. The queues are emptied (reads, then writes) at the turn of the next frame using [`window.requestAnimationFrame`](https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame). By batching DOM access we can avoid unnecessary document reflows and speed up layout perfomance dramatically.
+Each read/write job is added to a corresponding read/write queue. The queues are emptied (reads, then writes) at the turn of the next frame using [`window.requestAnimationFrame`](https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame).
 
 DOM-Batch aims to behave like a singleton across *all* modules in your app. When any module requires `'dom-batch'` they  get the same instance back, meaning DOM-Batch can harmonize app-wide DOM access. Potentially a third-party library could depend on DOM-Batch, and better intrgrate within an app that itself uses it.
 
