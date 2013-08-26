@@ -28,3 +28,12 @@ dom.write(function() {
 <DOM Write>
 <DOM Write>
 ```
+
+## Author
+
+- **Wilson Page** - [@wilsonpage](http://github.com/wilsonpage)
+
+## Contributors
+
+- **Wilson Page** - [@wilsonpage](http://github.com/wilsonpage)
+- **George Crawford** - [@georgecrawford](http://github.com/georgecrawford)
