@@ -102,5 +102,27 @@ buster.testCase('DomBatch', {
         done();
       });
     });
+  },
+
+  "Should call a 'read' callback with the given context": function(done) {
+    var dom = new DomBatch();
+    var cb = this.spy();
+    var ctx = { foo: 'bar' };
+
+    dom.read(function() {
+      assert.equals(this.foo, 'bar');
+      done();
+    }, ctx);
+  },
+
+  "Should call a 'write' callback with the given context": function(done) {
+    var dom = new DomBatch();
+    var cb = this.spy();
+    var ctx = { foo: 'bar' };
+
+    dom.write(function() {
+      assert.equals(this.foo, 'bar');
+      done();
+    }, ctx);
   }
 });
