@@ -29,6 +29,23 @@ dom.write(function() {
 <DOM Write>
 ```
 
+## Tests
+
+#### With PhantomJS
+
+```
+$ npm install
+$ npm test
+```
+
+#### Without PhantomJS
+
+```
+$ node_modules/.bin/buster-static
+```
+
+...then visit http://localhost:8282/ in browser
+
 ## Author
 
 - **Wilson Page** - [@wilsonpage](http://github.com/wilsonpage)
