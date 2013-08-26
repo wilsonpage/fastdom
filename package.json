@@ -1,11 +1,11 @@
 {
   "name": "dom-batch",
   "description": "Eliminates layout thrashing by batching DOM read/write interactions",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "lib/dom-batch.js",
-  "scripts": [
-    "lib/dom-batch.js"
-  ],
+  "scripts": {
+    "test": "./node_modules/.bin/grunt buster"
+  },
   "homepage": "https://github.com/wilsonpage/dom-batch",
   "author": {
     "name": "Wilson Page",
@@ -21,8 +21,5 @@
     "grunt-cli": "~0.1.9",
     "grunt": "~0.4.1",
     "buster": "~0.6.12"
-  },
-  "scripts": {
-    "test": "./node_modules/.bin/grunt buster"
   }
 }
