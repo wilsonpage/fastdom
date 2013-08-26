@@ -24,6 +24,7 @@ buster.testCase('DomBatch', {
     var write1 = this.spy();
     var write2 = this.spy();
 
+    // Assign unsorted
     dom.read(read1);
     dom.write(write1);
     dom.read(read2);
@@ -32,7 +33,7 @@ buster.testCase('DomBatch', {
     // After the queue has been emptied
     // check the callbacks were called
     // in the correct order.
-    requestAnimationFrame(function() {
+    raf(function() {
       assert(read1.calledBefore(read2));
       assert(read2.calledBefore(write1));
       assert(write1.calledBefore(write2));
@@ -47,7 +48,7 @@ buster.testCase('DomBatch', {
     dom.read(function() {
 
       // Schedule a callback for *next* frame
-      requestAnimationFrame(cb);
+      raf(cb);
 
       // Schedule a read callback
       // that should be run in the
@@ -68,7 +69,7 @@ buster.testCase('DomBatch', {
     dom.read(function() {
 
       // Schedule a callback for *next* frame
-      requestAnimationFrame(cb);
+      raf(cb);
 
       // Schedule a read callback
       // that should be run in the
@@ -89,7 +90,7 @@ buster.testCase('DomBatch', {
     dom.write(function() {
 
       // Schedule a callback for *next* frame
-      requestAnimationFrame(cb);
+      raf(cb);
 
       // Schedule a write that should be
       // called in the next frame, meaning
@@ -101,6 +102,4 @@ buster.testCase('DomBatch', {
       });
     });
   }
-
-
 });
