@@ -49,7 +49,7 @@ Old fashioned [download](http://github.com/wilsonpage/dom-batch/raw/master/lib/d
 
 ## How it works
 
-DOM-Batch works as a regulatory layer between your app/library and the DOM. **By batching DOM access we avoid unnecessary document reflows and speed up layout perfomance dramatically**.
+DOM-Batch works as a regulatory layer between your app/library and the DOM. By batching DOM access we **avoid unnecessary document reflows and speed up layout perfomance dramatically**.
 
 Each read/write job is added to a corresponding read/write queue. The queues are emptied (reads, then writes) at the turn of the next frame using [`window.requestAnimationFrame`](https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame).
 
