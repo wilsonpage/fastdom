@@ -1,6 +1,6 @@
 {
   "name": "dom-batch",
-  "description": "Batches functions into a single async batch",
+  "description": "Batches DOM reads and writes together for optimum performance",
   "version": "0.0.1",
   "main": "lib/dom-batch.js",
   "scripts": [
@@ -13,7 +13,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/wilsonpage/fruitmachine.git"
+    "url": "git://github.com/wilsonpage/dom-batch.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "buster": "~0.6.2",
+    "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.8",
+    "grunt-buster": "~0.1.2"
+  }
 }
