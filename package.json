@@ -17,9 +17,9 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "buster": "~0.6.2",
+    "grunt-buster": "~0.2.1",
+    "grunt-cli": "~0.1.9",
     "grunt": "~0.4.1",
-    "grunt-cli": "~0.1.8",
-    "grunt-buster": "~0.2.1"
+    "buster": "~0.6.12"
   }
 }
