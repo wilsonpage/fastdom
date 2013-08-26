@@ -4,10 +4,10 @@ config["dom-batch"] = {
   rootPath: '../',
   environment: "browser",
   sources: [
-    'test/setup.js',
-    'lib/dom-batch.js'
+    'lib/dom-batch.js',
+    'test/setup.js'
   ],
   tests: [
-    'test/tests.js'
+    'test/test-*.js'
   ]
 };
