@@ -1,7 +1,7 @@
 {
   "name": "dom-batch",
   "description": "Batches DOM reads and writes together for optimum performance",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "lib/dom-batch.js",
   "scripts": [
     "lib/dom-batch.js"
