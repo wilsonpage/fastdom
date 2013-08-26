@@ -30,21 +30,29 @@
 
       var h = Math.round(Math.random() * 300);
 
-      // Write
-      div1.style.height = h + 'px';
+      dom.write(function() {
+        div1.style.height = h + 'px';
 
-      // Read
-      h = Math.round(Math.random() * div1.clientHeight);
+        // Read
+        dom.read(function() {
+          h = Math.round(Math.random() * div1.clientHeight);
 
-      // Write
-      div2.style.height = h + 'px';
+          // Write
+          dom.write(function() {
+            div2.style.height = h + 'px';
 
+            // Read
+            dom.read(function() {
+              h = Math.round(Math.random() * div2.clientHeight);
 
-      // Read
-      h = Math.round(Math.random() * div2.clientHeight);
-
-      // Write
-      div3.style.height = h + 'px';
+              // Write
+              dom.write(function() {
+                div3.style.height = h + 'px';
+              });
+            });
+          });
+        });
+      });
     }
 
     button.onclick = go;

@@ -27,24 +27,15 @@
     var div3 = document.getElementById('div3');
 
     function go() {
+      setAspect(div1);
+      setAspect(div2);
+      setAspect(div3);
+    }
 
-      var h = Math.round(Math.random() * 300);
-
-      // Write
-      div1.style.height = h + 'px';
-
-      // Read
-      h = Math.round(Math.random() * div1.clientHeight);
-
-      // Write
-      div2.style.height = h + 'px';
-
-
-      // Read
-      h = Math.round(Math.random() * div2.clientHeight);
-
-      // Write
-      div3.style.height = h + 'px';
+    function setAspect(div) {
+      var aspect = 9/16;
+      var h = div.clientWidth * aspect;
+      div.style.height = h + 'px';
     }
 
     button.onclick = go;

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>title</title>
+<style>
+
+  * {
+    box-sizing: border-box;
+  }
+
+  div {
+    float: left;
+    background: silver;
+    border: solid 2px white;
+  }
+
+</style>
+</head>
+<body>
+  <button id="gobtn">Go</button>
+  <button id="resetbtn">reset</button>
+  <section id="container"></section>
+  <script type="text/javascript" src="../lib/dom-batch.js"></script>
+  <script>
+    var dom = new DomBatch();
+    var n = 100;
+    var divs;
+
+    var button = document.getElementById('button');
+
+    // Setup
+    //
+    function reset() {
+      divs = [];
+      container.innerHTML = '';
+
+      for (var i = 0; i < n; i++) {
+        var div = document.createElement('div');
+        div.style.width = Math.round(Math.random() * window.innerWidth) + 'px';
+        container.appendChild(div);
+        divs.push(div);
+      }
+    }
+
+    function go() {
+      var start = performance.now();
+      divs.forEach(setAspect);
+      console.log(performance.now() - start + 'ms');
+    }
+
+    function setAspect(div) {
+      var aspect = 9/16;
+
+      // READ
+      var h = div.clientWidth * aspect;
+
+      // WRITE
+      div.style.height = h + 'px';
+    }
+
+    reset();
+
+    gobtn.onclick = go;
+    resetbtn.onclick = reset;
+  </script>
+</body>
+</html>
