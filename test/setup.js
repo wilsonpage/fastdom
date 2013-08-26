@@ -1,0 +1,2 @@
+
+var dom = new DomBatch();
