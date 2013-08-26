@@ -21,5 +21,8 @@
     "grunt-cli": "~0.1.9",
     "grunt": "~0.4.1",
     "buster": "~0.6.12"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/grunt buster"
   }
 }
