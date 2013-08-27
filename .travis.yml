@@ -4,4 +4,4 @@ script:
 language: node_js
 
 node_js:
-  - 0.10.2
+  - "0.10"
