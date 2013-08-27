@@ -1,6 +1,6 @@
 {
   "name": "dom-batch",
-  "description": "Eliminates layout thrashing by batching DOM read/write interactions",
+  "description": "Eliminates layout thrashing by batching DOM read/write operations",
   "version": "0.3.0",
   "main": "lib/dom-batch.js",
   "scripts": [

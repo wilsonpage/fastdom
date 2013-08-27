@@ -1,6 +1,6 @@
 # dom-batch [![Build Status](https://travis-ci.org/wilsonpage/dom-batch.png?branch=master)](https://travis-ci.org/wilsonpage/dom-batch)
 
-Eliminates layout thrashing by batching DOM read/write interactions.
+Eliminates layout thrashing by batching DOM read/write operations.
 
 ```js
 var dom = new DomBatch();
