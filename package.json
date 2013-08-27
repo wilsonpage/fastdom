@@ -1,7 +1,7 @@
 {
   "name": "dom-batch",
   "description": "Eliminates layout thrashing by batching DOM read/write operations",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "main": "lib/dom-batch.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha-phantomjs test/index.html"
