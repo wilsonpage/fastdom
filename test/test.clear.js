@@ -1,60 +1,60 @@
 
-buster.testCase('DomBatch - Clearing', {
+suite('Clear', function(){
 
-  "Should not run 'read' job if cleared (sync)": function(done) {
+  test("Should not run 'read' job if cleared (sync)", function(done) {
     var dom = new DomBatch();
-    var read = this.spy();
+    var read = sinon.spy();
 
     dom.read(read);
     dom.clearRead(read);
 
     raf(function() {
-      refute(read.called);
+      assert(!read.called);
       done();
     });
-  },
+  });
 
-  "Should fail silently if job not found in queue": function(done) {
+  test("Should fail silently if job not found in queue", function(done) {
     var dom = new DomBatch();
-    var read = this.spy();
-    var read2 = this.spy();
+    var read = sinon.spy();
+    var read2 = sinon.spy();
 
     dom.read(read);
     dom.clearRead(read2);
 
     raf(function() {
-      refute(read2.called);
+      assert(!read2.called);
       done();
     });
-  },
+  });
 
-  "Should not run 'write' job if cleared (async)": function(done) {
+  test("Should not run 'write' job if cleared (async)", function(done) {
     var dom = new DomBatch();
-    var read = this.spy();
-    var write = this.spy();
+    var read = sinon.spy();
+    var write = sinon.spy();
 
     dom.write(write);
     dom.read(function() {
       dom.clearWrite(write);
 
       raf(function() {
-        refute(read.called);
+        assert(!read.called);
         done();
       });
     });
-  },
+  });
 
-  "Should not run 'write' job if cleared": function(done) {
+  test("Should not run 'write' job if cleared", function(done) {
     var dom = new DomBatch();
-    var write = this.spy();
+    var write = sinon.spy();
 
     dom.write(write);
     dom.clearWrite(write);
 
     raf(function() {
-      refute(write.called);
+      assert(!write.called);
       done();
     });
-  }
+  });
 
 });

@@ -1,29 +1,28 @@
-var DomBatch = dom.constructor;
 
-buster.testCase('DomBatch', {
+suite('Set', function() {
 
-  "Should run reads before writes": function(done) {
+  test("Should run reads before writes", function(done) {
     var dom = new DomBatch();
 
-    var read = this.spy(function() {
-      refute(write.called);
+    var read = sinon.spy(function() {
+      assert(!write.called);
     });
 
-    var write = this.spy(function() {
+    var write = sinon.spy(function() {
       assert(read.called);
       done();
     });
 
     dom.read(read);
     dom.write(write);
-  },
+  });
 
-  "Should call all reads together, followed by all writes": function(done) {
+  test("Should call all reads together, followed by all writes", function(done) {
     var dom = new DomBatch();
-    var read1 = this.spy();
-    var read2 = this.spy();
-    var write1 = this.spy();
-    var write2 = this.spy();
+    var read1 = sinon.spy();
+    var read2 = sinon.spy();
+    var write1 = sinon.spy();
+    var write2 = sinon.spy();
 
     // Assign unsorted
     dom.read(read1);
@@ -40,11 +39,11 @@ buster.testCase('DomBatch', {
       assert(write1.calledBefore(write2));
       done();
     });
-  },
+  });
 
-  "Should call a read in the same frame if scheduled inside a read callback": function(done) {
+  test("Should call a read in the same frame if scheduled inside a read callback", function(done) {
     var dom = new DomBatch();
-    var cb = this.spy();
+    var cb = sinon.spy();
 
     dom.read(function() {
 
@@ -57,15 +56,15 @@ buster.testCase('DomBatch', {
       // the RAF callback has not
       // yet been fired.
       dom.read(function() {
-        refute(cb.called);
+        assert(!cb.called);
         done();
       });
     });
-  },
+  });
 
-  "Should call a write in the same frame if scheduled inside a read callback": function(done) {
+  test("Should call a write in the same frame if scheduled inside a read callback", function(done) {
     var dom = new DomBatch();
-    var cb = this.spy();
+    var cb = sinon.spy();
 
     dom.read(function() {
 
@@ -78,15 +77,15 @@ buster.testCase('DomBatch', {
       // the RAF callback has not
       // yet been fired.
       dom.write(function() {
-        refute(cb.called);
+        assert(!cb.called);
         done();
       });
     });
-  },
+  });
 
-  "Should call a read in the *next* frame if scheduled inside a write callback": function(done) {
+  test("Should call a read in the *next* frame if scheduled inside a write callback", function(done) {
     var dom = new DomBatch();
-    var cb = this.spy();
+    var cb = sinon.spy();
 
     dom.write(function() {
 
@@ -102,27 +101,27 @@ buster.testCase('DomBatch', {
         done();
       });
     });
-  },
+  });
 
-  "Should call a 'read' callback with the given context": function(done) {
+  test("Should call a 'read' callback with the given context", function(done) {
     var dom = new DomBatch();
-    var cb = this.spy();
+    var cb = sinon.spy();
     var ctx = { foo: 'bar' };
 
     dom.read(function() {
-      assert.equals(this.foo, 'bar');
+      assert.equal(this.foo, 'bar');
       done();
     }, ctx);
-  },
+  });
 
-  "Should call a 'write' callback with the given context": function(done) {
+  test("Should call a 'write' callback with the given context", function(done) {
     var dom = new DomBatch();
-    var cb = this.spy();
+    var cb = sinon.spy();
     var ctx = { foo: 'bar' };
 
     dom.write(function() {
-      assert.equals(this.foo, 'bar');
+      assert.equal(this.foo, 'bar');
       done();
     }, ctx);
-  }
+  });
 });
