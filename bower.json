@@ -1,0 +1,15 @@
+{
+  "name": "dom-batch",
+  "description": "Eliminates layout thrashing by batching DOM read/write interactions",
+  "version": "0.3.1",
+  "main": "lib/dom-batch.js",
+  "scripts": [
+    "lib/dom-batch.js"
+  ],
+  "ignore": [
+    "examples/",
+    "test/",
+    "README.md"
+  ],
+  "license": "MIT"
+}
