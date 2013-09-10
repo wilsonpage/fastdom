@@ -1,23 +1,23 @@
-# dom-batch [![Build Status](https://travis-ci.org/wilsonpage/dom-batch.png?branch=master)](https://travis-ci.org/wilsonpage/dom-batch)
+# fastdom [![Build Status](https://travis-ci.org/wilsonpage/fastdom.png?branch=master)](https://travis-ci.org/wilsonpage/fastdom)
 
 Eliminates layout thrashing by batching DOM read/write operations.
 
 ```js
-var dom = new DomBatch();
+var fastdom = new FastDom();
 
-dom.read(function() {
+fastdom.read(function() {
   console.log('<DOM Read>');
 });
 
-dom.write(function() {
+fastdom.write(function() {
   console.log('<DOM Write>');
 });
 
-dom.read(function() {
+fastdom.read(function() {
   console.log('<DOM Read>');
 });
 
-dom.write(function() {
+fastdom.write(function() {
   console.log('<DOM Write>');
 });
 
@@ -31,74 +31,74 @@ dom.write(function() {
 
 ## Installation
 
-DOM-Batch is CommonJS and AMD compatible, you can install it in one of the follwing ways:
+FastDom is CommonJS and AMD compatible, you can install it in one of the follwing ways:
 
 ```
-$ npm install dom-batch
-```
-
-or
-
-```
-$ bower install dom-batch
+$ npm install fastdom
 ```
 
 or
 
-Old fashioned [download](http://github.com/wilsonpage/dom-batch/raw/master/lib/dom-batch.js).
+```
+$ bower install fastdom
+```
+
+or
+
+Old fashioned [download](http://github.com/wilsonpage/fastdom/raw/master/lib/fastdom.js).
 
 ## How it works
 
-DOM-Batch works as a regulatory layer between your app/library and the DOM. By batching DOM access we **avoid unnecessary document reflows and speed up layout perfomance dramatically**.
+FastDom works as a regulatory layer between your app/library and the DOM. By batching DOM access we **avoid unnecessary document reflows and speed up layout perfomance dramatically**.
 
 Each read/write job is added to a corresponding read/write queue. The queues are emptied (reads, then writes) at the turn of the next frame using [`window.requestAnimationFrame`](https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame).
 
-DOM-Batch aims to behave like a singleton across *all* modules in your app. When any module requires `'dom-batch'` they  get the same instance back, meaning DOM-Batch can harmonize DOM access app-wide.
+FastDom aims to behave like a singleton across *all* modules in your app. When any module requires `'fastdom'` they  get the same instance back, meaning FastDom can harmonize DOM access app-wide.
 
-Potentially a third-party library could depend on DOM-Batch, and better intrgrate within an app that itself uses it.
+Potentially a third-party library could depend on FastDom, and better intrgrate within an app that itself uses it.
 
 ## API
 
-### DomBatch#read(callback[, context])
+### FastDom#read(callback[, context])
 
 Schedules a task for the 'read' queue.
 
 ```js
-dom.read(function() {
+fastdom.read(function() {
   var width = element.clientWidth;
 });
 ```
 
-### DomBatch#write(callback[, context])
+### FastDom#write(callback[, context])
 
 Schedules a task for the 'write' queue.
 
 ```js
-dom.write(function() {
+fastdom.write(function() {
   element.style.width = width + 'px';
 });
 ```
 
-### DomBatch#clearRead(callback)
+### FastDom#clearRead(callback)
 
 Removes a task from the 'read' queue.
 
 ```js
 var fn = function(){};
 
-dom.read(fn);
-dom.clearRead(fn);
+fastdom.read(fn);
+fastdom.clearRead(fn);
 ```
 
-### DomBatch#clearWrite(callback)
+### FastDom#clearWrite(callback)
 
 Removes a task from the 'write' queue.
 
 ```js
 var fn = function(){};
 
-dom.write(fn);
-dom.clearWrite(fn);
+fastdom.write(fn);
+fastdom.clearWrite(fn);
 ```
 
 ## Tests
@@ -112,11 +112,7 @@ $ npm test
 
 #### Without PhantomJS
 
-```
-$ node_modules/.bin/buster-static
-```
-
-...then visit http://localhost:8282/ in browser
+Open `test/index.html` in your browser.
 
 ## Author
 
