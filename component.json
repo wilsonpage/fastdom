@@ -1,10 +1,10 @@
 {
-  "name": "dom-batch",
+  "name": "fastdom",
   "description": "Eliminates layout thrashing by batching DOM read/write operations",
   "version": "0.3.1",
-  "main": "lib/dom-batch.js",
+  "main": "lib/fastdom.js",
   "scripts": [
-    "lib/dom-batch.js"
+    "lib/fastdom.js"
   ],
   "ignore": [
   	"examples/"
