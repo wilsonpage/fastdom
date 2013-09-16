@@ -7,7 +7,9 @@
     "lib/fastdom.js"
   ],
   "ignore": [
-  	"examples/"
+    "examples/",
+    "test/",
+    "README.md"
   ],
   "license": "MIT"
 }

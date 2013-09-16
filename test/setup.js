@@ -5,4 +5,8 @@ var raf = window.requestAnimationFrame
   || window.mozRequestAnimationFrame
   || function(cb) { window.setTimeout(cb, 1000 / 60); };
 
-var DomBatch = dom.constructor;
+// Make constructor
+var FastDom = fastdom.constructor;
+
+// Alias chai.assert
+var assert = chai.assert;

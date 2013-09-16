@@ -1,25 +1,25 @@
 {
-  "name": "dom-batch",
-  "description": "Eliminates layout thrashing by batching DOM read/write interactions",
-  "version": "0.3.1",
-  "main": "lib/dom-batch.js",
+  "name": "fastdom",
+  "description": "Eliminates layout thrashing by batching DOM read/write operations",
+  "version": "0.4.2",
+  "main": "lib/fastdom.js",
   "scripts": {
-    "test": "./node_modules/.bin/grunt buster"
+    "test": "./node_modules/.bin/mocha-phantomjs test/index.html"
   },
-  "homepage": "https://github.com/wilsonpage/dom-batch",
+  "homepage": "https://github.com/wilsonpage/fastdom",
   "author": {
     "name": "Wilson Page",
     "email": "wilsonpage@me.com"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/wilsonpage/dom-batch.git"
+    "url": "git://github.com/wilsonpage/fastdom.git"
   },
   "license": "MIT",
   "devDependencies": {
-    "grunt-buster": "~0.2.1",
-    "grunt-cli": "~0.1.9",
-    "grunt": "~0.4.1",
-    "buster": "~0.6.12"
+    "mocha": "~1.12.0",
+    "sinon": "~1.7.3",
+    "chai": "~1.7.2",
+    "mocha-phantomjs": "~3.1.2"
   }
 }
