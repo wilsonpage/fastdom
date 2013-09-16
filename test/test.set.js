@@ -124,4 +124,21 @@ suite('Set', function() {
       done();
     }, ctx);
   });
+
+  test("Should have empty job hash when batch complete", function(done) {
+    var fastdom = new FastDom();
+
+    fastdom.read(function(){});
+    fastdom.read(function(){});
+    fastdom.write(function(){});
+    fastdom.write(function(){});
+
+    // Check there are four jobs stored
+    assert.equal(objectLength(fastdom.jobs), 4);
+
+    raf(function() {
+      assert.equal(objectLength(fastdom.jobs), 0);
+      done();
+    });
+  });
 });
