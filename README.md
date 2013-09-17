@@ -93,7 +93,7 @@ fastdom.clearRead(id);
 Removes a job from the 'write' queue by id.
 
 ```js
-var id = fastdom.read(function(){});
+var id = fastdom.write(function(){});
 fastdom.clearWrite(id);
 ```
 
