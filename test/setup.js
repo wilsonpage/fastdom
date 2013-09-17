@@ -10,3 +10,9 @@ var FastDom = fastdom.constructor;
 
 // Alias chai.assert
 var assert = chai.assert;
+
+function objectLength(object) {
+  var l = 0;
+  for (var key in object) l++;
+  return l;
+}
