@@ -88,7 +88,7 @@ var id = fastdom.read(function(){});
 fastdom.clearRead(id);
 ```
 
-### FastDom#clearWrite(callback)
+### FastDom#clearWrite(id)
 
 Removes a job from the 'write' queue by id.
 
