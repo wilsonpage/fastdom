@@ -61,7 +61,7 @@ Potentially a third-party library could depend on FastDom, and better intrgrate 
 
 ### FastDom#read(callback[, context])
 
-Schedules a task for the 'read' queue.
+Schedules a job for the 'read' queue. Returns a unique ID that can be used to clear the scheduled job.
 
 ```js
 fastdom.read(function() {
@@ -71,7 +71,7 @@ fastdom.read(function() {
 
 ### FastDom#write(callback[, context])
 
-Schedules a task for the 'write' queue.
+Schedules a job for the 'write' queue. Returns a unique ID that can be used to clear the scheduled job.
 
 ```js
 fastdom.write(function() {
@@ -79,26 +79,22 @@ fastdom.write(function() {
 });
 ```
 
-### FastDom#clearRead(callback)
+### FastDom#clearRead(id)
 
-Removes a task from the 'read' queue.
+Removes a job from the 'read' queue by id.
 
 ```js
-var fn = function(){};
-
-fastdom.read(fn);
-fastdom.clearRead(fn);
+var id = fastdom.read(function(){});
+fastdom.clearRead(id);
 ```
 
 ### FastDom#clearWrite(callback)
 
-Removes a task from the 'write' queue.
+Removes a job from the 'write' queue by id.
 
 ```js
-var fn = function(){};
-
-fastdom.write(fn);
-fastdom.clearWrite(fn);
+var id = fastdom.read(function(){});
+fastdom.clearWrite(id);
 ```
 
 ## Tests
