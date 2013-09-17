@@ -97,15 +97,14 @@ var id = fastdom.write(function(){});
 fastdom.clearWrite(id);
 ```
 
-### FastDom#defer(frames)
+### FastDom#defer(callback, frames)
 
 Defers a job for the number of frames specified. This is useful is you have a particualrly expensive piece of work to do, and don't want it to be done with all the other work.
 
 For example; you are using third party library that doesn't expose an API that allows you split DOM read/write work, `fastdom.defer()` will push this work futher into the future and prevent it from disrupting other carefully batched work.
 
 ```js
-var id = fastdom.write(function(){});
-fastdom.clearWrite(id);
+fastdom.defer(expensiveStuff, 3);
 ```
 
 ## Tests
