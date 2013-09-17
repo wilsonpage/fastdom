@@ -124,4 +124,41 @@ suite('Set', function() {
       done();
     }, ctx);
   });
+
+  test("Should have empty job hash when batch complete", function(done) {
+    var fastdom = new FastDom();
+
+    fastdom.read(function(){});
+    fastdom.read(function(){});
+    fastdom.write(function(){});
+    fastdom.write(function(){});
+
+    // Check there are four jobs stored
+    assert.equal(objectLength(fastdom.jobs), 4);
+
+    raf(function() {
+      assert.equal(objectLength(fastdom.jobs), 0);
+      done();
+    });
+  });
+
+  test("Should maintain correct context if single method is registered twice", function(done) {
+    var fastdom = new FastDom();
+    var ctx1 = { foo: 'bar' };
+    var ctx2 = { bar: 'baz' };
+
+    function shared(){}
+
+    var spy1 = sinon.spy(shared);
+    var spy2 = sinon.spy(shared);
+
+    fastdom.read(spy1, ctx1);
+    fastdom.read(spy2, ctx2);
+
+    raf(function() {
+      spy1.calledOn(ctx1);
+      spy2.calledOn(ctx2);
+      done();
+    });
+  });
 });

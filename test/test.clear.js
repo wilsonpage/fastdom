@@ -5,8 +5,8 @@ suite('Clear', function(){
     var fastdom = new FastDom();
     var read = sinon.spy();
 
-    fastdom.read(read);
-    fastdom.clearRead(read);
+    var id = fastdom.read(read);
+    fastdom.clearRead(id);
 
     raf(function() {
       assert(!read.called);
@@ -19,8 +19,8 @@ suite('Clear', function(){
     var read = sinon.spy();
     var read2 = sinon.spy();
 
-    fastdom.read(read);
-    fastdom.clearRead(read2);
+    var id = fastdom.read(read);
+    fastdom.clearRead(id);
 
     raf(function() {
       assert(!read2.called);
@@ -33,9 +33,9 @@ suite('Clear', function(){
     var read = sinon.spy();
     var write = sinon.spy();
 
-    fastdom.write(write);
+    var id = fastdom.write(write);
     fastdom.read(function() {
-      fastdom.clearWrite(write);
+      fastdom.clearWrite(id);
 
       raf(function() {
         assert(!read.called);
@@ -47,9 +47,9 @@ suite('Clear', function(){
   test("Should not run 'write' job if cleared", function(done) {
     var fastdom = new FastDom();
     var write = sinon.spy();
+    var id = fastdom.write(write);
 
-    fastdom.write(write);
-    fastdom.clearWrite(write);
+    fastdom.clearWrite(id);
 
     raf(function() {
       assert(!write.called);
