@@ -29,6 +29,10 @@ fastdom.write(function() {
 <DOM Write>
 ```
 
+## Examples
+
+- [Aspect ratio example](http://wilsonpage.github.io/fastdom/examples/aspect-ratio.html)
+
 ## Installation
 
 FastDom is CommonJS and AMD compatible, you can install it in one of the follwing ways:
