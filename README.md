@@ -35,7 +35,7 @@ fastdom.write(function() {
 
 ## Installation
 
-FastDom is CommonJS and AMD compatible, you can install it in one of the follwing ways:
+FastDom is CommonJS and AMD compatible, you can install it in one of the following ways:
 
 ```
 $ npm install fastdom
