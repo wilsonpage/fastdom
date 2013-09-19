@@ -156,8 +156,31 @@ suite('Set', function() {
     fastdom.read(spy2, ctx2);
 
     raf(function() {
-      spy1.calledOn(ctx1);
-      spy2.calledOn(ctx2);
+      assert(spy1.calledOn(ctx1));
+      assert(spy2.calledOn(ctx2));
+      done();
+    });
+  });
+
+  test("Should call a registered onError handler when an error is thrown inside a job", function(done) {
+    var fastdom = new FastDom();
+    var err1 = { some: 'error1' };
+    var err2 = { some: 'error2' };
+
+    fastdom.onError = sinon.spy();
+
+    fastdom.read(function() {
+      throw err1;
+    });
+
+    fastdom.write(function() {
+      throw err2;
+    });
+
+    raf(function() {
+      assert(fastdom.onError.calledTwice);
+      assert(fastdom.onError.getCall(0).calledWith(err1));
+      assert(fastdom.onError.getCall(1).calledWith(err2));
       done();
     });
   });
