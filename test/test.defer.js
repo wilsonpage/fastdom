@@ -5,7 +5,7 @@ suite('defer', function(){
     var fastdom = new FastDom();
     var job = sinon.spy();
 
-    fastdom.defer(job, 4);
+    fastdom.defer(4, job);
 
     raf(function() {
       assert(!job.called);
@@ -20,5 +20,16 @@ suite('defer', function(){
         });
       });
     });
+  });
+
+  test("Should call a deferred callback with the given context", function(done) {
+    var fastdom = new FastDom();
+    var cb = sinon.spy();
+    var ctx = { foo: 'bar' };
+
+    fastdom.defer(2, function() {
+      assert.equal(this.foo, 'bar');
+      done();
+    }, ctx);
   });
 });
