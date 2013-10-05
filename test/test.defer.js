@@ -32,4 +32,19 @@ suite('defer', function(){
       done();
     }, ctx);
   });
+
+  test("Should remove the reference to the job once run", function(done) {
+    var fastdom = new FastDom();
+    var callback = sinon.spy();
+    var id = fastdom.defer(2, callback);
+
+    raf(function() {
+      raf(function() {
+        raf(function() {
+          assert(!fastdom.jobs[id]);
+          done();
+        });
+      });
+    });
+  });
 });

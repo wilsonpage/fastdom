@@ -76,4 +76,22 @@ suite('Clear', function(){
     });
   });
 
+  test("Should remove reference to the job if cleared", function(done) {
+    var fastdom = new FastDom();
+    var write = sinon.spy();
+    var id = fastdom.defer(2, write);
+
+    fastdom.clear(id);
+
+    raf(function() {
+      raf(function() {
+        raf(function() {
+          assert(!write.called);
+          assert(!fastdom.jobs[id]);
+          done();
+        });
+      });
+    });
+  });
+
 });
