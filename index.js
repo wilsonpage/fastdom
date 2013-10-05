@@ -172,7 +172,7 @@
       ctx = job.ctx || this;
       delete this.jobs[id];
       try { job.fn.call(ctx); } catch (e) {
-        if (this.onError) this.onError(e);
+        this.onError(e);
       }
     }
   };
@@ -218,7 +218,7 @@
     (function wrapped() {
       if (frames-- === 0) {
         try { fn.call(ctx); } catch(e) {
-          if (this.onError) this.onError(e);
+          this.onError(e);
         }
       } else {
         job.timer = raf(wrapped);
@@ -246,6 +246,16 @@
       type: type
     };
   };
+
+  /**
+   * Called when a callback errors.
+   * Overwrite this if you don't
+   * want errors inside your jobs
+   * to fail silently.
+   *
+   * @param {Error}
+   */
+  FastDom.prototype.onError = function(){};
 
   // We only ever want there to be
   // one instance of FastDom in an app
