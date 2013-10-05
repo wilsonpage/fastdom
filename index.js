@@ -163,18 +163,11 @@
    * @param  {Array} list
    * @api private
    */
-  FastDom.prototype._run = function(list) {
-    var ctx;
-    var job;
+  FastDom.prototype.flush = function(list) {
     var id;
 
     while (id = list.shift()) {
-      job = this.jobs[id];
-      ctx = job.ctx || this;
-      delete this.jobs[id];
-      try { job.fn.call(ctx); } catch (e) {
-        this.onError(e);
-      }
+      this.run(this.jobs[id]);
     }
   };
 
@@ -194,12 +187,12 @@
     // Set the mode to 'reading',
     // then empty all read jobs
     this.mode = 'reading';
-    this._run(this.queue.read);
+    this.flush(this.queue.read);
 
     // Set the mode to 'writing'
     // then empty all write jobs
     this.mode = 'writing';
-    this._run(this.queue.write);
+    this.flush(this.queue.write);
 
     this.mode = null;
   };
@@ -257,6 +250,18 @@
    * @param {Error}
    */
   FastDom.prototype.onError = function(){};
+
+  FastDom.prototype.run = function(job){
+    var ctx = job.ctx || this;
+
+    // Clear reference to the job
+    delete this.jobs[job.id];
+
+    // Call the job in
+    try { job.fn.call(ctx); } catch(e) {
+      this.onError(e);
+    }
+  };
 
   // We only ever want there to be
   // one instance of FastDom in an app
