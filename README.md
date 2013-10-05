@@ -6,27 +6,29 @@ Eliminates layout thrashing by batching DOM read/write operations.
 var fastdom = new FastDom();
 
 fastdom.read(function() {
-  console.log('<DOM Read>');
+  console.log('read');
 });
 
 fastdom.write(function() {
-  console.log('<DOM Write>');
+  console.log('write');
 });
 
 fastdom.read(function() {
-  console.log('<DOM Read>');
+  console.log('read');
 });
 
 fastdom.write(function() {
-  console.log('<DOM Write>');
+  console.log('write');
 });
+```
 
-// Output:
+Outputs:
 
-<DOM Read>
-<DOM Read>
-<DOM Write>
-<DOM Write>
+```
+read
+read
+write
+write
 ```
 
 ## Examples
