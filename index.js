@@ -208,16 +208,18 @@
    */
   FastDom.prototype.defer = function(frames, fn, ctx) {
     if (frames < 0) return;
-    var job = this._add('defer', fn);
+    var job = this._add('defer', fn, ctx);
+    var self = this;
+
     (function wrapped() {
-      if (frames-- === 0) {
-        try { fn.call(ctx); } catch(e) {
-          this.onError(e);
-        }
-      } else {
-        job.timer = raf(wrapped);
+      if (!(frames--)) {
+         self.run(job);
+         return;
       }
+
+      job.timer = raf(wrapped);
     })();
+
     return job.id;
   };
 
