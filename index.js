@@ -247,19 +247,6 @@
     };
   };
 
-  /**
-   * Removes a job from
-   * the given queue.
-   * @param  {Array} list
-   * @param  {Number} id
-   * @api private
-   */
-  FastDom.prototype._remove = function(list, id) {
-    var index = list.indexOf(id);
-    if (~index) list.splice(index, 1);
-    delete this.jobs[id];
-  };
-
   // We only ever want there to be
   // one instance of FastDom in an app
   fastdom = fastdom || new FastDom();
