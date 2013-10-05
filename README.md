@@ -46,7 +46,7 @@ $ npm install fastdom
 $ bower install fastdom
 ```
 ```
-$ componet install wilsonpage/fastdom
+$ component install wilsonpage/fastdom
 ```
 or [download](http://github.com/wilsonpage/fastdom/raw/master/index.js).
 
