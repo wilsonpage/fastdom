@@ -42,16 +42,13 @@ FastDom is CommonJS and AMD compatible, you can install it in one of the followi
 ```
 $ npm install fastdom
 ```
-
-or
-
 ```
 $ bower install fastdom
 ```
-
-or
-
-Old fashioned [download](http://github.com/wilsonpage/fastdom/raw/master/index.js).
+```
+$ componet install wilsonpage/fastdom
+```
+or [download](http://github.com/wilsonpage/fastdom/raw/master/index.js).
 
 ## How it works
 
