@@ -5,3 +5,4 @@
   * add `FastDom#clear` clears read, write and defer jobs by id
   * remove `FastDom#clearRead`
   * remove `FastDom#clearWrite`
+  * change directory structure by removing `/lib`
