@@ -87,6 +87,9 @@
     var job = this.jobs[id];
     if (!job) return;
 
+    // Clear reference
+    delete this.jobs[id];
+
     // Defer jobs are cleared differently
     if (job.type === 'defer') {
       caf(job.timer);
@@ -95,9 +98,7 @@
 
     var list = this.queue[job.type];
     var index = list.indexOf(id);
-
     if (~index) list.splice(index, 1);
-    delete this.jobs[id];
   };
 
   /**
