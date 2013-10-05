@@ -83,15 +83,6 @@ fastdom.write(function() {
 });
 ```
 
-### FastDom#clearRead(id)
-
-Removes a job from the 'read' queue by id.
-
-```js
-var id = fastdom.read(function(){});
-fastdom.clearRead(id);
-```
-
 ### FastDom#defer(frames, callback[, context])
 
 Defers a job for the number of frames specified. This is useful is you have a particualrly expensive piece of work to do, and don't want it to be done with all the other work.
