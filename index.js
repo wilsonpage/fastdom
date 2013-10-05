@@ -56,9 +56,9 @@
    * @api public
    */
   FastDom.prototype.read = function(fn, ctx) {
-    var job = this._add('read', fn, ctx);
+    var job = this.add('read', fn, ctx);
     this.queue.read.push(job.id);
-    this._request('read');
+    this.request('read');
     return job.id;
   };
 
@@ -70,9 +70,9 @@
    * @api public
    */
   FastDom.prototype.write = function(fn, ctx) {
-    var job = this._add('write', fn, ctx);
+    var job = this.add('write', fn, ctx);
     this.queue.write.push(job.id);
-    this._request('write');
+    this.request('write');
     return job.id;
   };
 
@@ -109,7 +109,7 @@
    * @param  {String} type
    * @api private
    */
-  FastDom.prototype._request = function(type) {
+  FastDom.prototype.request = function(type) {
     var mode = this.mode;
     var self = this;
 
@@ -134,7 +134,7 @@
     if (this.pending) return;
 
     // Schedule frame (preserving context)
-    raf(function() { self._frame(); });
+    raf(function() { self.frame(); });
 
     // Set flag to indicate
     // a frame has been scheduled
@@ -146,8 +146,9 @@
    * id for a job.
    *
    * @return {Number}
+   * @api private
    */
-  FastDom.prototype._uniqueId = function() {
+  FastDom.prototype.uniqueId = function() {
     return ++this.lastId;
   };
 
@@ -165,7 +166,6 @@
    */
   FastDom.prototype.flush = function(list) {
     var id;
-
     while (id = list.shift()) {
       this.run(this.jobs[id]);
     }
@@ -177,7 +177,7 @@
    *
    * @api private
    */
-  FastDom.prototype._frame = function() {
+  FastDom.prototype.frame = function() {
 
     // Set the pending flag to
     // false so that any new requests
@@ -208,7 +208,7 @@
    */
   FastDom.prototype.defer = function(frames, fn, ctx) {
     if (frames < 0) return;
-    var job = this._add('defer', fn, ctx);
+    var job = this.add('defer', fn, ctx);
     var self = this;
 
     (function wrapped() {
@@ -233,8 +233,8 @@
    * @returns {Number} id
    * @api private
    */
-  FastDom.prototype._add = function(type, fn, ctx) {
-    var id = this._uniqueId();
+  FastDom.prototype.add = function(type, fn, ctx) {
+    var id = this.uniqueId();
     return this.jobs[id] = {
       id: id,
       fn: fn,
@@ -253,6 +253,11 @@
    */
   FastDom.prototype.onError = function(){};
 
+  /**
+   * Runs a given job.
+   * @param  {Object} job
+   * @api private
+   */
   FastDom.prototype.run = function(job){
     var ctx = job.ctx || this;
 
