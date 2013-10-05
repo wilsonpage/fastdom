@@ -4,7 +4,7 @@
   "version": "0.7.0",
   "main": "lib/fastdom.js",
   "scripts": [
-    "lib/fastdom.js"
+    "index.js"
   ],
   "ignore": [
   	"examples/"

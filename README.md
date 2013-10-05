@@ -49,7 +49,7 @@ $ bower install fastdom
 
 or
 
-Old fashioned [download](http://github.com/wilsonpage/fastdom/raw/master/lib/fastdom.js).
+Old fashioned [download](http://github.com/wilsonpage/fastdom/raw/master/index.js).
 
 ## How it works
 
