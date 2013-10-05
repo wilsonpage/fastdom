@@ -31,13 +31,6 @@
     || window.msCancelRequestAnimationFrame
     || function(id) { window.clearTimeout(id); };
 
-  // Use existing instance if
-  // one already exists in
-  // this app, else make one.
-  fastdom = (fastdom instanceof FastDom)
-    ? fastdom
-    : new FastDom();
-
   /**
    * Creates a fresh
    * FastDom instance.
@@ -267,8 +260,12 @@
     delete this.jobs[id];
   };
 
+  // We only ever want there to be
+  // one instance of FastDom in an app
+  fastdom = fastdom || new FastDom();
+
   /**
-   * Expose 'FastDom'
+   * Expose 'fastdom'
    */
 
   if (typeof exports === "object") {
