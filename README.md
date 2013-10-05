@@ -92,15 +92,6 @@ var id = fastdom.read(function(){});
 fastdom.clearRead(id);
 ```
 
-### FastDom#clearWrite(id)
-
-Removes a job from the 'write' queue by id.
-
-```js
-var id = fastdom.write(function(){});
-fastdom.clearWrite(id);
-```
-
 ### FastDom#defer(frames, callback[, context])
 
 Defers a job for the number of frames specified. This is useful is you have a particualrly expensive piece of work to do, and don't want it to be done with all the other work.
@@ -109,6 +100,20 @@ For example; you are using third party library that doesn't expose an API that a
 
 ```js
 fastdom.defer(3, expensiveStuff);
+```
+
+### FastDom#clear(id)
+
+Clears **any** scheduled job by id.
+
+```js
+var read = fastdom.read(function(){});
+var write = fastdom.write(function(){});
+var defer = fastdom.defer(4, function(){});
+
+fastdom.clear(read);
+fastdom.clear(write);
+fastdom.clear(defer);
 ```
 
 ## Tests
