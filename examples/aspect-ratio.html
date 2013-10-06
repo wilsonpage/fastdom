@@ -26,12 +26,13 @@
   <section id="container"></section>
   <script type="text/javascript" src="../lib/fastdom.js"></script>
   <script>
-    var n = input.value;
+    var n;
     var start;
     var divs;
 
     // Setup
     function reset() {
+      n = input.value;
       divs = [];
       container.innerHTML = '';
 
