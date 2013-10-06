@@ -2,8 +2,6 @@
 suite('Set', function() {
 
   test("Should run reads before writes", function(done) {
-    var fastdom = new FastDom();
-
     var read = sinon.spy(function() {
       assert(!write.called);
     });
@@ -18,7 +16,6 @@ suite('Set', function() {
   });
 
   test("Should call all reads together, followed by all writes", function(done) {
-    var fastdom = new FastDom();
     var read1 = sinon.spy();
     var read2 = sinon.spy();
     var write1 = sinon.spy();
@@ -42,7 +39,6 @@ suite('Set', function() {
   });
 
   test("Should call a read in the same frame if scheduled inside a read callback", function(done) {
-    var fastdom = new FastDom();
     var cb = sinon.spy();
 
     fastdom.read(function() {
@@ -63,7 +59,6 @@ suite('Set', function() {
   });
 
   test("Should call a write in the same frame if scheduled inside a read callback", function(done) {
-    var fastdom = new FastDom();
     var cb = sinon.spy();
 
     fastdom.read(function() {
@@ -84,7 +79,6 @@ suite('Set', function() {
   });
 
   test("Should call a read in the *next* frame if scheduled inside a write callback", function(done) {
-    var fastdom = new FastDom();
     var cb = sinon.spy();
 
     fastdom.write(function() {
@@ -104,7 +98,6 @@ suite('Set', function() {
   });
 
   test("Should call a 'read' callback with the given context", function(done) {
-    var fastdom = new FastDom();
     var cb = sinon.spy();
     var ctx = { foo: 'bar' };
 
@@ -115,7 +108,6 @@ suite('Set', function() {
   });
 
   test("Should call a 'write' callback with the given context", function(done) {
-    var fastdom = new FastDom();
     var cb = sinon.spy();
     var ctx = { foo: 'bar' };
 
@@ -126,8 +118,6 @@ suite('Set', function() {
   });
 
   test("Should have empty job hash when batch complete", function(done) {
-    var fastdom = new FastDom();
-
     fastdom.read(function(){});
     fastdom.read(function(){});
     fastdom.write(function(){});
@@ -143,7 +133,6 @@ suite('Set', function() {
   });
 
   test("Should maintain correct context if single method is registered twice", function(done) {
-    var fastdom = new FastDom();
     var ctx1 = { foo: 'bar' };
     var ctx2 = { bar: 'baz' };
 
@@ -163,7 +152,6 @@ suite('Set', function() {
   });
 
   test("Should call a registered onError handler when an error is thrown inside a job", function(done) {
-    var fastdom = new FastDom();
     var err1 = { some: 'error1' };
     var err2 = { some: 'error2' };
 
