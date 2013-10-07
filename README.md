@@ -58,7 +58,7 @@ Each read/write job is added to a corresponding read/write queue. The queues are
 
 FastDom aims to behave like a singleton across *all* modules in your app. When any module requires `'fastdom'` they  get the same instance back, meaning FastDom can harmonize DOM access app-wide.
 
-Potentially a third-party library could depend on FastDom, and better intrgrate within an app that itself uses it.
+Potentially a third-party library could depend on FastDom, and better integrate within an app that itself uses it.
 
 ## API
 
