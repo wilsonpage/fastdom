@@ -278,7 +278,7 @@
    * Expose 'fastdom'
    */
 
-  if (typeof exports === "object") {
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = fastdom;
   } else if (typeof define === "function" && define.amd) {
     define(function(){ return fastdom; });
