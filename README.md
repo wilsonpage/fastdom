@@ -1,32 +1,34 @@
 # fastdom [![Build Status](https://travis-ci.org/wilsonpage/fastdom.png?branch=master)](https://travis-ci.org/wilsonpage/fastdom)
 
-Eliminates layout thrashing by batching DOM read/write operations.
+Eliminates layout thrashing by batching DOM read/write operations (~750 bytes gzipped).
 
 ```js
 var fastdom = new FastDom();
 
 fastdom.read(function() {
-  console.log('<DOM Read>');
+  console.log('read');
 });
 
 fastdom.write(function() {
-  console.log('<DOM Write>');
+  console.log('write');
 });
 
 fastdom.read(function() {
-  console.log('<DOM Read>');
+  console.log('read');
 });
 
 fastdom.write(function() {
-  console.log('<DOM Write>');
+  console.log('write');
 });
+```
 
-// Output:
+Outputs:
 
-<DOM Read>
-<DOM Read>
-<DOM Write>
-<DOM Write>
+```
+read
+read
+write
+write
 ```
 
 ## Examples
@@ -40,16 +42,13 @@ FastDom is CommonJS and AMD compatible, you can install it in one of the followi
 ```
 $ npm install fastdom
 ```
-
-or
-
 ```
 $ bower install fastdom
 ```
-
-or
-
-Old fashioned [download](http://github.com/wilsonpage/fastdom/raw/master/lib/fastdom.js).
+```
+$ component install wilsonpage/fastdom
+```
+or [download](http://github.com/wilsonpage/fastdom/raw/master/index.js).
 
 ## How it works
 
@@ -59,7 +58,7 @@ Each read/write job is added to a corresponding read/write queue. The queues are
 
 FastDom aims to behave like a singleton across *all* modules in your app. When any module requires `'fastdom'` they  get the same instance back, meaning FastDom can harmonize DOM access app-wide.
 
-Potentially a third-party library could depend on FastDom, and better intrgrate within an app that itself uses it.
+Potentially a third-party library could depend on FastDom, and better integrate within an app that itself uses it.
 
 ## API
 
@@ -83,32 +82,28 @@ fastdom.write(function() {
 });
 ```
 
-### FastDom#clearRead(id)
-
-Removes a job from the 'read' queue by id.
-
-```js
-var id = fastdom.read(function(){});
-fastdom.clearRead(id);
-```
-
-### FastDom#clearWrite(id)
-
-Removes a job from the 'write' queue by id.
-
-```js
-var id = fastdom.write(function(){});
-fastdom.clearWrite(id);
-```
-
-### FastDom#defer(callback, frames)
+### FastDom#defer(frames, callback[, context])
 
 Defers a job for the number of frames specified. This is useful is you have a particualrly expensive piece of work to do, and don't want it to be done with all the other work.
 
 For example; you are using third party library that doesn't expose an API that allows you split DOM read/write work, `fastdom.defer()` will push this work futher into the future and prevent it from disrupting other carefully batched work.
 
 ```js
-fastdom.defer(expensiveStuff, 3);
+fastdom.defer(3, expensiveStuff);
+```
+
+### FastDom#clear(id)
+
+Clears **any** scheduled job by id.
+
+```js
+var read = fastdom.read(function(){});
+var write = fastdom.write(function(){});
+var defer = fastdom.defer(4, function(){});
+
+fastdom.clear(read);
+fastdom.clear(write);
+fastdom.clear(defer);
 ```
 
 ## Tests
@@ -132,3 +127,15 @@ Open `test/index.html` in your browser.
 
 - **Wilson Page** - [@wilsonpage](http://github.com/wilsonpage)
 - **George Crawford** - [@georgecrawford](http://github.com/georgecrawford)
+
+## License
+
+(The MIT License)
+
+Copyright (c) 2013 Wilson Page <wilsonpage@me.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

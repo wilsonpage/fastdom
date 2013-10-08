@@ -6,7 +6,7 @@ suite('Clear', function(){
     var read = sinon.spy();
 
     var id = fastdom.read(read);
-    fastdom.clearRead(id);
+    fastdom.clear(id);
 
     raf(function() {
       assert(!read.called);
@@ -20,7 +20,7 @@ suite('Clear', function(){
     var read2 = sinon.spy();
 
     var id = fastdom.read(read);
-    fastdom.clearRead(id);
+    fastdom.clear(id);
 
     raf(function() {
       assert(!read2.called);
@@ -35,7 +35,7 @@ suite('Clear', function(){
 
     var id = fastdom.write(write);
     fastdom.read(function() {
-      fastdom.clearWrite(id);
+      fastdom.clear(id);
 
       raf(function() {
         assert(!read.called);
@@ -49,11 +49,48 @@ suite('Clear', function(){
     var write = sinon.spy();
     var id = fastdom.write(write);
 
-    fastdom.clearWrite(id);
+    fastdom.clear(id);
 
     raf(function() {
       assert(!write.called);
       done();
+    });
+  });
+
+  test("Should not run 'defer' job if cleared", function(done) {
+    var fastdom = new FastDom();
+    var write = sinon.spy();
+    var id = fastdom.defer(3, write);
+
+    fastdom.clear(id);
+
+    raf(function() {
+      raf(function() {
+        raf(function() {
+          raf(function() {
+            assert(!write.called);
+            done();
+          });
+        });
+      });
+    });
+  });
+
+  test("Should remove reference to the job if cleared", function(done) {
+    var fastdom = new FastDom();
+    var write = sinon.spy();
+    var id = fastdom.defer(2, write);
+
+    fastdom.clear(id);
+
+    raf(function() {
+      raf(function() {
+        raf(function() {
+          assert(!write.called);
+          assert(!fastdom.jobs[id]);
+          done();
+        });
+      });
     });
   });
 

@@ -13,18 +13,23 @@
 
   'use strict';
 
-  // RequestAnimationFrame Polyfill
+  // Normalize rAF
   var raf = window.requestAnimationFrame
     || window.webkitRequestAnimationFrame
     || window.mozRequestAnimationFrame
-    || function(cb) { window.setTimeout(cb, 1000 / 60); };
+    || window.msRequestAnimationFrame
+    || function(cb) { return window.setTimeout(cb, 1000 / 60); };
 
-  // Use existing instance if
-  // one already exists in
-  // this app, else make one.
-  fastdom = (fastdom instanceof FastDom)
-    ? fastdom
-    : new FastDom();
+  // Normalize cAF
+  var caf = window.cancelAnimationFrame
+    || window.cancelRequestAnimationFrame
+    || window.mozCancelAnimationFrame
+    || window.mozCancelRequestAnimationFrame
+    || window.webkitCancelAnimationFrame
+    || window.webkitCancelRequestAnimationFrame
+    || window.msCancelAnimationFrame
+    || window.msCancelRequestAnimationFrame
+    || function(id) { window.clearTimeout(id); };
 
   /**
    * Creates a fresh
@@ -37,8 +42,10 @@
     this.jobs = {};
     this.mode = null;
     this.pending = false;
-    this.reads = [];
-    this.writes = [];
+    this.queue = {
+      read: [],
+      write: []
+    };
   }
 
   /**
@@ -49,9 +56,10 @@
    * @api public
    */
   FastDom.prototype.read = function(fn, ctx) {
-    var id = this._add(this.reads, fn, ctx);
-    this._request('read');
-    return id;
+    var job = this.add('read', fn, ctx);
+    this.queue.read.push(job.id);
+    this.request('read');
+    return job.id;
   };
 
   /**
@@ -62,9 +70,10 @@
    * @api public
    */
   FastDom.prototype.write = function(fn, ctx) {
-    var id = this._add(this.writes, fn, ctx);
-    this._request('write');
-    return id;
+    var job = this.add('write', fn, ctx);
+    this.queue.write.push(job.id);
+    this.request('write');
+    return job.id;
   };
 
   /**
@@ -74,19 +83,22 @@
    * @param  {Number} id
    * @api public
    */
-  FastDom.prototype.clearRead = function(id) {
-    this._remove(this.reads, id);
-  };
+  FastDom.prototype.clear = function(id) {
+    var job = this.jobs[id];
+    if (!job) return;
 
-  /**
-   * Removes a job from
-   * the 'writes' queue.
-   *
-   * @param  {Number} id
-   * @api public
-   */
-  FastDom.prototype.clearWrite = function(id) {
-    this._remove(this.writes, id);
+    // Clear reference
+    delete this.jobs[id];
+
+    // Defer jobs are cleared differently
+    if (job.type === 'defer') {
+      caf(job.timer);
+      return;
+    }
+
+    var list = this.queue[job.type];
+    var index = list.indexOf(id);
+    if (~index) list.splice(index, 1);
   };
 
   /**
@@ -97,7 +109,7 @@
    * @param  {String} type
    * @api private
    */
-  FastDom.prototype._request = function(type) {
+  FastDom.prototype.request = function(type) {
     var mode = this.mode;
     var self = this;
 
@@ -122,7 +134,7 @@
     if (this.pending) return;
 
     // Schedule frame (preserving context)
-    raf(function() { self._frame(); });
+    raf(function() { self.frame(); });
 
     // Set flag to indicate
     // a frame has been scheduled
@@ -134,8 +146,9 @@
    * id for a job.
    *
    * @return {Number}
+   * @api private
    */
-  FastDom.prototype._uniqueId = function() {
+  FastDom.prototype.uniqueId = function() {
     return ++this.lastId;
   };
 
@@ -151,16 +164,10 @@
    * @param  {Array} list
    * @api private
    */
-  FastDom.prototype._run = function(list) {
-    var ctx;
-    var job;
+  FastDom.prototype.flush = function(list) {
     var id;
-
     while (id = list.shift()) {
-      job = this.jobs[id];
-      ctx = job.ctx || this;
-      delete this.jobs[id];
-      try { job.fn.call(ctx); } catch (e) {}
+      this.run(this.jobs[id]);
     }
   };
 
@@ -170,7 +177,7 @@
    *
    * @api private
    */
-  FastDom.prototype._frame = function() {
+  FastDom.prototype.frame = function() {
 
     // Set the pending flag to
     // false so that any new requests
@@ -180,12 +187,12 @@
     // Set the mode to 'reading',
     // then empty all read jobs
     this.mode = 'reading';
-    this._run(this.reads);
+    this.flush(this.queue.read);
 
     // Set the mode to 'writing'
     // then empty all write jobs
     this.mode = 'writing';
-    this._run(this.writes);
+    this.flush(this.queue.write);
 
     this.mode = null;
   };
@@ -195,18 +202,25 @@
    * by the number of frames
    * specified.
    *
-   * @param  {Function} fn
    * @param  {Number}   frames
+   * @param  {Function} fn
    * @api public
    */
-  FastDom.prototype.defer = function(fn, frames) {
+  FastDom.prototype.defer = function(frames, fn, ctx) {
+    if (frames < 0) return;
+    var job = this.add('defer', fn, ctx);
+    var self = this;
+
     (function wrapped() {
-      if (frames-- === 0) {
-        try { fn(); } catch (e) {}
-      } else {
-        raf(wrapped);
+      if (!(frames--)) {
+         self.run(job);
+         return;
       }
+
+      job.timer = raf(wrapped);
     })();
+
+    return job.id;
   };
 
   /**
@@ -219,42 +233,52 @@
    * @returns {Number} id
    * @api private
    */
-  FastDom.prototype._add = function(list, fn, ctx) {
-    var id = this._uniqueId();
-
-    // Store this job
-    this.jobs[id] = {
+  FastDom.prototype.add = function(type, fn, ctx) {
+    var id = this.uniqueId();
+    return this.jobs[id] = {
+      id: id,
       fn: fn,
-      ctx: ctx
+      ctx: ctx,
+      type: type
     };
-
-    // Push the id of
-    // this job into
-    // the given queue
-    list.push(id);
-
-    // Return the id
-    return id;
   };
 
   /**
-   * Removes a job from
-   * the given queue.
-   * @param  {Array} list
-   * @param  {Number} id
+   * Called when a callback errors.
+   * Overwrite this if you don't
+   * want errors inside your jobs
+   * to fail silently.
+   *
+   * @param {Error}
+   */
+  FastDom.prototype.onError = function(){};
+
+  /**
+   * Runs a given job.
+   * @param  {Object} job
    * @api private
    */
-  FastDom.prototype._remove = function(list, id) {
-    var index = list.indexOf(id);
-    if (~index) list.splice(index, 1);
-    delete this.jobs[id];
+  FastDom.prototype.run = function(job){
+    var ctx = job.ctx || this;
+
+    // Clear reference to the job
+    delete this.jobs[job.id];
+
+    // Call the job in
+    try { job.fn.call(ctx); } catch(e) {
+      this.onError(e);
+    }
   };
 
+  // We only ever want there to be
+  // one instance of FastDom in an app
+  fastdom = fastdom || new FastDom();
+
   /**
-   * Expose 'FastDom'
+   * Expose 'fastdom'
    */
 
-  if (typeof exports === "object") {
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = fastdom;
   } else if (typeof define === "function" && define.amd) {
     define(function(){ return fastdom; });
