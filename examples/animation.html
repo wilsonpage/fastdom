@@ -19,40 +19,54 @@
 				color: red;
 			}
 
+			.intro {
+				margin: 10px;
+				background: rgb(214, 213, 213);
+				border: 1px solid grey;
+				padding: 10px;
+			}
+
 		</style>
 
+		<div class="intro">An adaptation of the demo from the Google Developers article <a href="https://developers.google.com/chrome-developer-tools/docs/demos/too-much-layout/">Diagnosing forced synchronous layouts</a>. In the article, forced synchronous layouts are fixed by simply <em>not doing any reads at all</em>. Rather than this extreme solution, which will not be appropriate for many use cases, we instead use <strong>fastdom</strong> to intelligently defer and batch the DOM reads and writes, and get similar performance gains as a result.</div>
 		<label>Number of elements <input id="count" type="text" value="400" /></label>
 		<button id="sync" class="active">Forced synchronous layout</button>
 		<button id="async">Run with FastDom</button>
-		<button id="noread">Avoid DOM read</button>
+		<button id="noread">No DOM reads</button>
 		<button id="toggle">Start</button>
 
 		<div id='test'></div>
 
 		<script>
 
-			var moveMethod  = 'sync',
-				count       = document.getElementById('count'),
-				test        = document.getElementById('test'),
+			var moveMethod = 'sync',
+				count      = document.getElementById('count'),
+				test       = document.getElementById('test'),
 				timestamp, raf, movers;
 
 			var mover = {
 				sync: function(m) {
-					mover.setLeft(m, movers[m].offsetTop);
+
+					// Read the top offset, and use that for the left position
+					mover.setLeft(movers[m], movers[m].offsetTop);
 				},
 				async: function(m) {
+
+					// Use fastdom to batch the reads and writes with exactly the same code as the 'sync' routine
 					fastdom.read(function() {
 						var top = movers[m].offsetTop;
 						fastdom.write(function() {
-							mover.setLeft(m, top);
+							mover.setLeft(movers[m], top);
 						});
 					});
 				},
 				noread: function(m) {
-					mover.setLeft(m, m);
+
+					// Simply use the array index as the top value, so no DOM read is required
+					mover.setLeft(movers[m], m);
 				},
-				setLeft: function(m, top) {
-					movers[m].style.left = ((Math.sin(top + timestamp/1000)+1) * 500) + 'px';
+				setLeft: function(mover, top) {
+					mover.style.left = ((Math.sin(top + timestamp/1000) + 1) * 500) + 'px';
 				}
 			};
 
@@ -86,9 +100,9 @@
 					test.innerHTML = html;
 
 					movers = test.querySelectorAll('.mover');
-					movers[0].style.top = '50px';
+					movers[0].style.top = '150px';
 					for (var m = 1; m < movers.length; m++) {
-						movers[m].style.top = (m * 20) + 'px';
+						movers[m].style.top = (m * 20) + 150 + 'px';
 					}
 
 					raf = window.requestAnimationFrame(update);
