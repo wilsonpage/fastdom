@@ -33,10 +33,7 @@ write
 
 ## Examples
 
-<<<<<<< HEAD
-=======
 - [Animation example](http://wilsonpage.github.io/fastdom/examples/animation.html)
->>>>>>> upstream/gh-pages
 - [Aspect ratio example](http://wilsonpage.github.io/fastdom/examples/aspect-ratio.html)
 
 ## Installation
