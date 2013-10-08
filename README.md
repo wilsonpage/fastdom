@@ -33,6 +33,7 @@ write
 
 ## Examples
 
+- [Animation example](http://wilsonpage.github.io/fastdom/examples/animation.html)
 - [Aspect ratio example](http://wilsonpage.github.io/fastdom/examples/aspect-ratio.html)
 
 ## Installation
