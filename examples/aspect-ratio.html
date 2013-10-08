@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FastDom: Aspect Ratio Example</title>
+<style>
+
+  * {
+    box-sizing: border-box;
+  }
+
+  div {
+    float: left;
+    background: silver;
+    border: solid 2px white;
+  }
+
+</style>
+</head>
+<body>
+  <label>Number of elements <input id="input" type="text" value="100" /></label>
+  <button id="withoutFastDom">Run without FastDom</button>
+  <button id="withFastDom">Run with FastDom</button>
+  <button id="resetbtn">reset</button>
+  <section id="perf"></section>
+  <section id="container"></section>
+  <script type="text/javascript" src="../index.js"></script>
+  <script>
+    var n = input.value;
+    var start;
+    var divs;
+
+    // Setup
+    function reset() {
+      divs = [];
+      container.innerHTML = '';
+
+      for (var i = 0; i < n; i++) {
+        var div = document.createElement('div');
+        div.style.width = Math.round(Math.random() * window.innerWidth) + 'px';
+        container.appendChild(div);
+        divs.push(div);
+      }
+    }
+
+    function setAspect(div, i) {
+      var aspect = 9/16;
+      var isLast = i === (n - 1)
+      var h = div.clientWidth * aspect;
+
+      div.style.height = h + 'px';
+
+      if (isLast) {
+        displayPerf(performance.now() - start);
+      }
+    }
+
+    function setAspectFastDom(div, i) {
+      var aspect = 9/16;
+      var isLast = i === (n - 1)
+
+      // READ
+      fastdom.read(function() {
+        var h = div.clientWidth * aspect;
+
+        // WRITE
+        fastdom.write(function() {
+          div.style.height = h + 'px';
+
+          if (isLast) {
+            displayPerf(performance.now() - start);
+          }
+        });
+      });
+    }
+
+    function displayPerf(ms) {
+      perf.textContent = ms + 'ms';
+    }
+
+    withoutFastDom.onclick = function() {
+      reset();
+      start = performance.now();
+      divs.forEach(setAspect);
+    };
+
+    withFastDom.onclick = function() {
+      reset();
+      start = performance.now();
+      divs.forEach(setAspectFastDom);
+    };
+
+    resetbtn.onclick = reset;
+  </script>
+</body>
+</html>

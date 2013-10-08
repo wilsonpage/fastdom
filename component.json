@@ -1,0 +1,15 @@
+{
+  "name": "fastdom",
+  "description": "Eliminates layout thrashing by batching DOM read/write operations",
+  "version": "0.7.1",
+  "main": "index.js",
+  "scripts": [
+    "index.js"
+  ],
+  "ignore": [
+    "examples/",
+    "test/",
+    "README.md"
+  ],
+  "license": "MIT"
+}
