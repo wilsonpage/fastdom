@@ -1,5 +1,5 @@
 
-suite('Set', function() {
+suite('set', function() {
 
   test("Should run reads before writes", function(done) {
     var fastdom = new FastDom();

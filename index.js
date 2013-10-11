@@ -114,7 +114,7 @@
     var self = this;
 
     // If we are currently writing, we don't
-    // need to scedule a new frame as this
+    // need to schedule a new frame as this
     // job will be emptied from the write queue
     if (mode === 'writing' && type === 'write') return;
 
@@ -280,7 +280,7 @@
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = fastdom;
-  } else if (typeof define === "function" && define.amd) {
+  } else if (typeof define === 'function' && define.amd) {
     define(function(){ return fastdom; });
   } else {
     window['fastdom'] = fastdom;

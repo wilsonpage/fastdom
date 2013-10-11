@@ -1,5 +1,5 @@
 
-suite('Clear', function(){
+suite('clear', function(){
 
   test("Should not run 'read' job if cleared (sync)", function(done) {
     var fastdom = new FastDom();
