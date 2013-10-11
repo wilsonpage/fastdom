@@ -11,5 +11,6 @@
     "test/",
     "README.md"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "_source": "git@github.com:wilsonpage/fastdom.git"
 }
