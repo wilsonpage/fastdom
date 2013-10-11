@@ -1,7 +1,7 @@
 
 suite('clear', function(){
 
-  test("Should not run 'read' job if cleared (sync)", function(done) {
+  test('Should not run "read" job if cleared (sync)', function(done) {
     var fastdom = new FastDom();
     var read = sinon.spy();
 
@@ -14,7 +14,7 @@ suite('clear', function(){
     });
   });
 
-  test("Should fail silently if job not found in queue", function(done) {
+  test('Should fail silently if job not found in queue', function(done) {
     var fastdom = new FastDom();
     var read = sinon.spy();
     var read2 = sinon.spy();
@@ -28,7 +28,7 @@ suite('clear', function(){
     });
   });
 
-  test("Should not run 'write' job if cleared (async)", function(done) {
+  test('Should not run "write" job if cleared (async)', function(done) {
     var fastdom = new FastDom();
     var read = sinon.spy();
     var write = sinon.spy();
@@ -44,7 +44,7 @@ suite('clear', function(){
     });
   });
 
-  test("Should not run 'write' job if cleared", function(done) {
+  test('Should not run "write" job if cleared', function(done) {
     var fastdom = new FastDom();
     var write = sinon.spy();
     var id = fastdom.write(write);
@@ -57,7 +57,7 @@ suite('clear', function(){
     });
   });
 
-  test("Should not run 'defer' job if cleared", function(done) {
+  test('Should not run "defer" job if cleared', function(done) {
     var fastdom = new FastDom();
     var write = sinon.spy();
     var id = fastdom.defer(3, write);
@@ -76,7 +76,7 @@ suite('clear', function(){
     });
   });
 
-  test("Should remove reference to the job if cleared", function(done) {
+  test('Should remove reference to the job if cleared', function(done) {
     var fastdom = new FastDom();
     var write = sinon.spy();
     var id = fastdom.defer(2, write);
