@@ -40,13 +40,13 @@ write
 
 FastDom is CommonJS and AMD compatible, you can install it in one of the following ways:
 
-```
+``` sh
 $ npm install fastdom
 ```
-```
+``` sh
 $ bower install fastdom
 ```
-```
+``` sh
 $ component install wilsonpage/fastdom
 ```
 or [download](http://github.com/wilsonpage/fastdom/raw/master/index.js).
@@ -111,7 +111,7 @@ fastdom.clear(defer);
 
 #### With PhantomJS
 
-```
+``` sh
 $ npm install
 $ npm test
 ```
