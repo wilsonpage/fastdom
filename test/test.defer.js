@@ -1,7 +1,7 @@
 
 suite('defer', function(){
 
-  test("Should run the job after the specified number of frames", function(done) {
+  test('Should run the job after the specified number of frames', function(done) {
     var fastdom = new FastDom();
     var job = sinon.spy();
 
@@ -22,7 +22,7 @@ suite('defer', function(){
     });
   });
 
-  test("Should call a deferred callback with the given context", function(done) {
+  test('Should call a deferred callback with the given context', function(done) {
     var fastdom = new FastDom();
     var cb = sinon.spy();
     var ctx = { foo: 'bar' };
@@ -33,7 +33,7 @@ suite('defer', function(){
     }, ctx);
   });
 
-  test("Should remove the reference to the job once run", function(done) {
+  test('Should remove the reference to the job once run', function(done) {
     var fastdom = new FastDom();
     var callback = sinon.spy();
     var id = fastdom.defer(2, callback);
