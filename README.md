@@ -3,8 +3,6 @@
 Eliminates layout thrashing by batching DOM read/write operations (~750 bytes gzipped).
 
 ```js
-var fastdom = new FastDom();
-
 fastdom.read(function() {
   console.log('read');
 });
