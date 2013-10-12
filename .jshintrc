@@ -1,0 +1,11 @@
+{
+	// Enforcing options
+	"camelcase": true,
+	"curly": false,
+	"quotmark": "single",
+
+	// Relaxing options
+	"boss": true,
+	"sub": true,
+	"laxbreak": true
+}

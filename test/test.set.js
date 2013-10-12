@@ -1,7 +1,7 @@
 
-suite('Set', function() {
+suite('set', function() {
 
-  test("Should run reads before writes", function(done) {
+  test('Should run reads before writes', function(done) {
     var fastdom = new FastDom();
 
     var read = sinon.spy(function() {
@@ -17,7 +17,7 @@ suite('Set', function() {
     fastdom.write(write);
   });
 
-  test("Should call all reads together, followed by all writes", function(done) {
+  test('Should call all reads together, followed by all writes', function(done) {
     var fastdom = new FastDom();
     var read1 = sinon.spy();
     var read2 = sinon.spy();
@@ -41,7 +41,7 @@ suite('Set', function() {
     });
   });
 
-  test("Should call a read in the same frame if scheduled inside a read callback", function(done) {
+  test('Should call a read in the same frame if scheduled inside a read callback', function(done) {
     var fastdom = new FastDom();
     var cb = sinon.spy();
 
@@ -62,7 +62,7 @@ suite('Set', function() {
     });
   });
 
-  test("Should call a write in the same frame if scheduled inside a read callback", function(done) {
+  test('Should call a write in the same frame if scheduled inside a read callback', function(done) {
     var fastdom = new FastDom();
     var cb = sinon.spy();
 
@@ -83,7 +83,7 @@ suite('Set', function() {
     });
   });
 
-  test("Should call a read in the *next* frame if scheduled inside a write callback", function(done) {
+  test('Should call a read in the *next* frame if scheduled inside a write callback', function(done) {
     var fastdom = new FastDom();
     var cb = sinon.spy();
 
@@ -103,7 +103,7 @@ suite('Set', function() {
     });
   });
 
-  test("Should call a 'read' callback with the given context", function(done) {
+  test('Should call a "read" callback with the given context', function(done) {
     var fastdom = new FastDom();
     var cb = sinon.spy();
     var ctx = { foo: 'bar' };
@@ -114,7 +114,7 @@ suite('Set', function() {
     }, ctx);
   });
 
-  test("Should call a 'write' callback with the given context", function(done) {
+  test('Should call a "write" callback with the given context', function(done) {
     var fastdom = new FastDom();
     var cb = sinon.spy();
     var ctx = { foo: 'bar' };
@@ -125,7 +125,7 @@ suite('Set', function() {
     }, ctx);
   });
 
-  test("Should have empty job hash when batch complete", function(done) {
+  test('Should have empty job hash when batch complete', function(done) {
     var fastdom = new FastDom();
 
     fastdom.read(function(){});
@@ -142,7 +142,7 @@ suite('Set', function() {
     });
   });
 
-  test("Should maintain correct context if single method is registered twice", function(done) {
+  test('Should maintain correct context if single method is registered twice', function(done) {
     var fastdom = new FastDom();
     var ctx1 = { foo: 'bar' };
     var ctx2 = { bar: 'baz' };
@@ -162,7 +162,7 @@ suite('Set', function() {
     });
   });
 
-  test("Should call a registered onError handler when an error is thrown inside a job", function(done) {
+  test('Should call a registered onError handler when an error is thrown inside a job', function(done) {
     var fastdom = new FastDom();
     var err1 = { some: 'error1' };
     var err2 = { some: 'error2' };
