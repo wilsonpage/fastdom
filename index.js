@@ -41,7 +41,7 @@
     this.frames = [];
     this.lastId = 0;
     this.mode = null;
-    this.queue = {
+    this.batch = {
       hash: {},
       read: [],
       write: []
@@ -49,8 +49,9 @@
   }
 
   /**
-   * Adds a job to
-   * the read queue.
+   * Adds a job to the
+   * write batch and schedules
+   * a new frame if need be.
    *
    * @param  {Function} fn
    * @api public
@@ -58,7 +59,7 @@
   FastDom.prototype.read = function(fn, ctx) {
     var job = this.add('read', fn, ctx);
 
-    this.queue.read.push(job.id);
+    this.batch.read.push(job.id);
 
     // If we're writing and a 'read' job
     // comes in, we do have to schedule a new frame
@@ -71,8 +72,9 @@
   };
 
   /**
-   * Adds a job to
-   * the write queue.
+   * Adds a job to the
+   * write batch and schedules
+   * a new frame if need be.
    *
    * @param  {Function} fn
    * @api public
@@ -80,10 +82,10 @@
   FastDom.prototype.write = function(fn, ctx) {
     var job = this.add('write', fn, ctx);
 
-    this.queue.write.push(job.id);
+    this.batch.write.push(job.id);
 
     // If we're emptying the read
-    // queue and a write comes in,
+    // batch and a write comes in,
     // we don't need to schedule a
     // new frame. If we're writing
     // and write comes in we don't
@@ -100,6 +102,10 @@
    * Defers the given job
    * by the number of frames
    * specified.
+   *
+   * If no frames are given
+   * then the job is run in
+   * the next free frame.
    *
    * @param  {Number}   frame
    * @param  {Function} fn
@@ -139,14 +145,14 @@
       return this.clearFrame(id);
     }
 
-    var job = this.queue.hash[id];
+    var job = this.batch.hash[id];
     if (!job) return;
 
-    var list = this.queue[job.type];
+    var list = this.batch[job.type];
     var index = list.indexOf(id);
 
     // Clear references
-    delete this.queue.hash[id];
+    delete this.batch.hash[id];
     if (~index) list.splice(index, 1);
   };
 
@@ -207,7 +213,7 @@
   FastDom.prototype.flush = function(list) {
     var id;
     while (id = list.shift()) {
-      this.run(this.queue.hash[id]);
+      this.run(this.batch.hash[id]);
     }
   };
 
@@ -222,19 +228,19 @@
     // Set the mode to 'reading',
     // then empty all read jobs
     this.mode = 'reading';
-    this.flush(this.queue.read);
+    this.flush(this.batch.read);
 
     // Set the mode to 'writing'
     // then empty all write jobs
     this.mode = 'writing';
-    this.flush(this.queue.write);
+    this.flush(this.batch.write);
 
     this.mode = null;
   };
 
   /**
    * Adds a new job to
-   * the given queue.
+   * the given batch.
    *
    * @param {Array}   list
    * @param {Function} fn
@@ -244,7 +250,7 @@
    */
   FastDom.prototype.add = function(type, fn, ctx) {
     var id = this.uniqueId();
-    return this.queue.hash[id] = {
+    return this.batch.hash[id] = {
       id: id,
       fn: fn,
       ctx: ctx,
@@ -262,7 +268,7 @@
     var ctx = job.ctx || this;
 
     // Clear reference to the job
-    delete this.queue.hash[job.id];
+    delete this.batch.hash[job.id];
 
     if (this.quiet) {
       try { job.fn.call(ctx); } catch (e) {}

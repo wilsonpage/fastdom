@@ -146,10 +146,10 @@ suite('set', function() {
     fastdom.write(function(){});
 
     // Check there are four jobs stored
-    assert.equal(objectLength(fastdom.queue.hash), 4);
+    assert.equal(objectLength(fastdom.batch.hash), 4);
 
     raf(function() {
-      assert.equal(objectLength(fastdom.queue.hash), 0);
+      assert.equal(objectLength(fastdom.batch.hash), 0);
       done();
     });
   });
