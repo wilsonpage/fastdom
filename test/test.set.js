@@ -59,11 +59,17 @@ suite('set', function() {
         assert(!cb.called);
         done();
       });
+
+      // Should not have scheduled a new frame
+      assert(fastdom.frames.length === 0);
     });
   });
 
   test('Should call a write in the same frame if scheduled inside a read callback', function(done) {
     var fastdom = new FastDom();
+
+    fastdom.catchErrors = false;
+
     var cb = sinon.spy();
 
     fastdom.read(function() {
@@ -80,6 +86,9 @@ suite('set', function() {
         assert(!cb.called);
         done();
       });
+
+      // Should not have scheduled a new frame
+      assert(fastdom.frames.length === 0);
     });
   });
 
@@ -100,6 +109,9 @@ suite('set', function() {
         assert(cb.called);
         done();
       });
+
+      // Should not have scheduled a new frame
+      assert(fastdom.frames.length === 1);
     });
   });
 
@@ -162,12 +174,12 @@ suite('set', function() {
     });
   });
 
-  test('Should call a registered onError handler when an error is thrown inside a job', function(done) {
+  test('Should no error if the `quiet` flag is set', function(done) {
     var fastdom = new FastDom();
     var err1 = { some: 'error1' };
     var err2 = { some: 'error2' };
 
-    fastdom.onError = sinon.spy();
+    fastdom.quiet = true;
 
     fastdom.read(function() {
       throw err1;
@@ -178,9 +190,6 @@ suite('set', function() {
     });
 
     raf(function() {
-      assert(fastdom.onError.calledTwice);
-      assert(fastdom.onError.getCall(0).calledWith(err1));
-      assert(fastdom.onError.getCall(1).calledWith(err2));
       done();
     });
   });

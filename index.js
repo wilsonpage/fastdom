@@ -266,9 +266,10 @@
     // Clear reference to the job
     delete this.queue.hash[job.id];
 
-    // Call the job in
-    try { job.fn.call(ctx); } catch(e) {
-      this.onError(e);
+    if (this.quiet) {
+      try { job.fn.call(ctx); } catch (e) {}
+    } else {
+      job.fn.call(ctx);
     }
   };
 
@@ -331,16 +332,6 @@
     // the frames queue and return
     return this.frames[index] = fn;
   };
-
-  /**
-   * Called when a callback errors.
-   * Overwrite this if you don't
-   * want errors inside your jobs
-   * to fail silently.
-   *
-   * @param {Error}
-   */
-  FastDom.prototype.onError = function(){};
 
   // We only ever want there to be
   // one instance of FastDom in an app
