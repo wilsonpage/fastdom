@@ -41,7 +41,6 @@
     this.frames = [];
     this.lastId = 0;
     this.mode = null;
-    this.pendingBatch = false;
     this.queue = {
       hash: {},
       read: [],
@@ -178,17 +177,17 @@
 
     // If there is already a frame
     // scheduled, don't schedule another one
-    if (this.pendingBatch) return;
+    if (this.batchPending) return;
 
     // Schedule batch for next frame
     this.schedule(0, function() {
-      self.pendingBatch = false;
+      self.batchPending = false;
       self.runBatch();
     });
 
     // Set flag to indicate
     // a frame has been scheduled
-    this.pendingBatch = true;
+    this.batchPending = true;
   };
 
   /**
