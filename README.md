@@ -81,7 +81,7 @@ fastdom.write(function() {
 });
 ```
 
-### FastDom#defer(frames, callback[, context])
+### FastDom#defer([frames,] callback[, context])
 
 Defers a job for the number of frames specified. This is useful is you have a particualrly expensive piece of work to do, and don't want it to be done with all the other work.
 
@@ -89,6 +89,19 @@ For example; you are using third party library that doesn't expose an API that a
 
 ```js
 fastdom.defer(3, expensiveStuff);
+```
+
+`FastDom#defer` can also be called with no `frames` argument to push work onto next avaiable frame.
+
+```js
+// Runs in frame 1
+fastdom.defer(expensiveStuff1);
+
+// Runs in frame 2
+fastdom.defer(expensiveStuff2);
+
+// Runs in frame 3
+fastdom.defer(expensiveStuff3);
 ```
 
 ### FastDom#clear(id)
