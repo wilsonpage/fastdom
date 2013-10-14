@@ -57,14 +57,12 @@
    */
   FastDom.prototype.read = function(fn, ctx) {
     var job = this.add('read', fn, ctx);
-    var mode = this.mode;
 
     this.queue.read.push(job.id);
 
-    // If we're writing and a 'read'
-    // job comes in, we do have to
-    // schedule a new frame
-    var needsFrame = !this.batchPending || mode === 'writing';
+    // If we're writing and a 'read' job
+    // comes in, we do have to schedule a new frame
+    var needsFrame = !this.batchPending || this.mode === 'writing';
 
     // Schedule a new frame if need be
     if (needsFrame) this.scheduleBatch();
