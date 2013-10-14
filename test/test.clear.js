@@ -59,8 +59,8 @@ suite('clear', function(){
 
   test('Should not run "defer" job if cleared', function(done) {
     var fastdom = new FastDom();
-    var write = sinon.spy();
-    var id = fastdom.defer(3, write);
+    var callback = sinon.spy();
+    var id = fastdom.defer(3, callback);
 
     fastdom.clear(id);
 
@@ -68,7 +68,7 @@ suite('clear', function(){
       raf(function() {
         raf(function() {
           raf(function() {
-            assert(!write.called);
+            assert(!callback.called);
             done();
           });
         });
@@ -79,7 +79,7 @@ suite('clear', function(){
   test('Should remove reference to the job if cleared', function(done) {
     var fastdom = new FastDom();
     var write = sinon.spy();
-    var id = fastdom.defer(2, write);
+    var id = fastdom.write(2, write);
 
     fastdom.clear(id);
 
@@ -87,11 +87,10 @@ suite('clear', function(){
       raf(function() {
         raf(function() {
           assert(!write.called);
-          assert(!fastdom.jobs[id]);
+          assert(!fastdom.queue.hash[id]);
           done();
         });
       });
     });
   });
-
 });

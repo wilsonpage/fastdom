@@ -134,10 +134,10 @@ suite('set', function() {
     fastdom.write(function(){});
 
     // Check there are four jobs stored
-    assert.equal(objectLength(fastdom.jobs), 4);
+    assert.equal(objectLength(fastdom.queue.hash), 4);
 
     raf(function() {
-      assert.equal(objectLength(fastdom.jobs), 0);
+      assert.equal(objectLength(fastdom.queue.hash), 0);
       done();
     });
   });
@@ -181,6 +181,19 @@ suite('set', function() {
       assert(fastdom.onError.calledTwice);
       assert(fastdom.onError.getCall(0).calledWith(err1));
       assert(fastdom.onError.getCall(1).calledWith(err2));
+      done();
+    });
+  });
+
+  test('Should stop rAF loop once frame queue is empty', function(done) {
+    var fastdom = new FastDom();
+    var callback = sinon.spy();
+
+    fastdom.read(callback);
+
+    raf(function() {
+      assert(callback.called);
+      assert(fastdom.looping === false);
       done();
     });
   });
