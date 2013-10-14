@@ -57,12 +57,14 @@
    */
   FastDom.prototype.read = function(fn, ctx) {
     var job = this.add('read', fn, ctx);
+    var mode = this.mode;
+
     this.queue.read.push(job.id);
 
-    // If we are reading we don't need to schedule
-    // a new frame as this read will be emptied
-    // in the currently active read queue
-    var needsFrame = this.mode !== 'reading';
+    // If we're writing and a 'read'
+    // job comes in, we do have to
+    // schedule a new frame
+    var needsFrame = !this.batchPending || mode === 'writing';
 
     // Schedule a new frame if need be
     if (needsFrame) this.scheduleBatch();
@@ -79,21 +81,16 @@
    */
   FastDom.prototype.write = function(fn, ctx) {
     var job = this.add('write', fn, ctx);
-    var mode = this.mode;
 
     this.queue.write.push(job.id);
 
-    // If currently writing, we don't
+    // If we're emptying the read
+    // queue and a write come in,
+    // we don't need to schedule a
+    // new frame. If we're writing
+    // and write comes in we don't
     // need to schedule a new frame
-    // as this job will be emptied
-    // from the write queue.
-    //
-    // If currently reading we don't
-    // need to schedule a new frame as
-    // this write job will be run after
-    // the read queue has been emptied
-    // in the currently active frame.
-    var needsFrame = mode !== 'writing' && mode !== 'reading';
+    var needsFrame = !this.batchPending;
 
     // Schedule a new frame if need be
     if (needsFrame) this.scheduleBatch();
@@ -175,14 +172,10 @@
   FastDom.prototype.scheduleBatch = function() {
     var self = this;
 
-    // If there is already a frame
-    // scheduled, don't schedule another one
-    if (this.batchPending) return;
-
     // Schedule batch for next frame
     this.schedule(0, function() {
-      self.batchPending = false;
       self.runBatch();
+      self.batchPending = false;
     });
 
     // Set flag to indicate
