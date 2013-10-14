@@ -83,7 +83,7 @@
     this.queue.write.push(job.id);
 
     // If we're emptying the read
-    // queue and a write come in,
+    // queue and a write comes in,
     // we don't need to schedule a
     // new frame. If we're writing
     // and write comes in we don't
