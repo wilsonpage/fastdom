@@ -7,8 +7,8 @@
 	<body>
 
 		<style>
-			.mover {
 
+			.mover {
 				/* Stolen shamelessly from https://developers.google.com/chrome-developer-tools/docs/demos/too-much-layout/ */
 				background: url("data:image/png;base64,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");
 				height: 100px;
@@ -20,40 +20,54 @@
 				color: red;
 			}
 
+			.intro {
+				margin: 10px;
+				background: rgb(214, 213, 213);
+				border: 1px solid grey;
+				padding: 10px;
+			}
+
 		</style>
 
+		<div class="intro">An adaptation of the demo from the Google Developers article <a href="https://developers.google.com/chrome-developer-tools/docs/demos/too-much-layout/">Diagnosing forced synchronous layouts</a>. In the article, forced synchronous layouts are fixed by simply <em>not doing any reads at all</em>. Rather than this extreme solution, which will not be appropriate for many use cases, we instead use <strong>fastdom</strong> to intelligently defer and batch the DOM reads and writes, and get similar performance gains as a result.</div>
 		<label>Number of elements <input id="count" type="text" value="400" /></label>
 		<button id="sync" class="active">Forced synchronous layout</button>
 		<button id="async">Run with FastDom</button>
-		<button id="noread">Avoid DOM read</button>
+		<button id="noread">No DOM reads</button>
 		<button id="toggle">Start</button>
 
 		<div id='test'></div>
 
 		<script>
 
-			var moveMethod  = 'sync',
-				count       = document.getElementById('count'),
-				test        = document.getElementById('test'),
+			var moveMethod = 'sync',
+				count      = document.getElementById('count'),
+				test       = document.getElementById('test'),
 				timestamp, raf, movers;
 
 			var mover = {
 				sync: function(m) {
-					mover.setLeft(m, movers[m].offsetTop);
+
+					// Read the top offset, and use that for the left position
+					mover.setLeft(movers[m], movers[m].offsetTop);
 				},
 				async: function(m) {
+
+					// Use fastdom to batch the reads and writes with exactly the same code as the 'sync' routine
 					fastdom.read(function() {
 						var top = movers[m].offsetTop;
 						fastdom.write(function() {
-							mover.setLeft(m, top);
+							mover.setLeft(movers[m], top);
 						});
 					});
 				},
 				noread: function(m) {
-					mover.setLeft(m, m);
+
+					// Simply use the array index as the top value, so no DOM read is required
+					mover.setLeft(movers[m], m);
 				},
-				setLeft: function(m, top) {
-					movers[m].style.left = ((Math.sin(top + timestamp/1000)+1) * 500) + 'px';
+				setLeft: function(mover, top) {
+					mover.style.left = ((Math.sin(top + timestamp/1000) + 1) * 500) + 'px';
 				}
 			};
 
@@ -87,9 +101,9 @@
 					test.innerHTML = html;
 
 					movers = test.querySelectorAll('.mover');
-					movers[0].style.top = '50px';
+					movers[0].style.top = '150px';
 					for (var m = 1; m < movers.length; m++) {
-						movers[m].style.top = (m * 20) + 'px';
+						movers[m].style.top = (m * 20) + 150 + 'px';
 					}
 
 					raf = window.requestAnimationFrame(update);
