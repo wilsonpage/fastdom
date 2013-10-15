@@ -118,6 +118,17 @@ fastdom.clear(write);
 fastdom.clear(defer);
 ```
 
+## Exceptions
+
+FastDom is async, this can therefore mean that when a job comes around to being executed, the node you were working with may no longer be there. These errors are usually not critical, but they can cripple your app. FastDom allows you to register an `onError` handler. If `fastdom.onError` has been registered, FastDom will catch any errors that occur in your jobs, and run the handler instead.
+
+```js
+fastdom.onError = function(error) {
+  // Do something if you want
+};
+
+```
+
 ## Tests
 
 #### With PhantomJS
