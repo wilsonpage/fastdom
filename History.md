@@ -1,4 +1,9 @@
 
+0.8.2 / 2013-10-15
+==================
+
+  * fix - prevent unnecessary frame being scheduled when write requested inside read callback, inside write callback.
+
 0.8.1 / 2013-10-15
 ==================
 
