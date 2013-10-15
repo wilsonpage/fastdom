@@ -261,19 +261,47 @@
   /**
    * Runs a given job.
    *
+   * Applications using FastDom
+   * have the options of setting
+   * `fastdom.onError`.
+   *
+   * This will catch any
+   * errors that may throw
+   * inside callbacks, which
+   * is useful as often DOM
+   * nodes have been removed
+   * since a job was scheduled.
+   *
+   * Example:
+   *
+   *   fastdom.onError = function(e) {
+   *     // Runs when jobs error
+   *   };
+   *
    * @param  {Object} job
    * @api private
    */
   FastDom.prototype.run = function(job){
     var ctx = job.ctx || this;
+    var fn = job.fn;
 
     // Clear reference to the job
     delete this.batch.hash[job.id];
 
-    if (this.quiet) {
-      try { job.fn.call(ctx); } catch (e) {}
-    } else {
-      job.fn.call(ctx);
+    // If no `onError` handler
+    // has been registered, just
+    // run the job normally.
+    if (!this.onError) {
+      return fn.call(ctx);
+    }
+
+    // If an `onError` handler
+    // has been registered, catch
+    // errors that throw inside
+    // callbacks, and run the
+    // handler instead.
+    try { fn.call(ctx); } catch (e) {
+      this.onError(e);
     }
   };
 
