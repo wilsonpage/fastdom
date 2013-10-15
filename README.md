@@ -91,7 +91,7 @@ For example; you are using third party library that doesn't expose an API that a
 fastdom.defer(3, expensiveStuff);
 ```
 
-`FastDom#defer` can also be called with no `frames` argument to push work onto next avaiable frame.
+`FastDom#defer` can also be called without the `frames` argument to push work onto next available frame.
 
 ```js
 // Runs in frame 1
@@ -106,7 +106,7 @@ fastdom.defer(expensiveStuff3);
 
 ### FastDom#clear(id)
 
-Clears **any** scheduled job by id.
+Clears **any** scheduled job.
 
 ```js
 var read = fastdom.read(function(){});
@@ -133,11 +133,11 @@ Open `test/index.html` in your browser.
 
 ## Author
 
-- **Wilson Page** - [@wilsonpage](http://github.com/wilsonpage)
+- **Wilson Page** - [@wilsonpage](http://twitter.com/wilsonpage)
 
 ## Contributors
 
-- **Wilson Page** - [@wilsonpage](http://github.com/wilsonpage)
+- **Wilson Page** - [@wilsonpage](http://twitter.com/wilsonpage)
 - **George Crawford** - [@georgecrawford](http://github.com/georgecrawford)
 
 ## License
