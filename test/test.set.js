@@ -112,6 +112,82 @@ suite('set', function() {
     });
   });
 
+  test('Should not request a new frame when a write is requested inside a nested read', function(done) {
+    var fastdom = new FastDom();
+    var callback = sinon.spy();
+
+    fastdom.write(function() {
+      fastdom.read(function() {
+
+        // Schedule a callback for *next* frame
+        raf(callback);
+
+        // Schedule a read callback
+        // that should be run in the
+        // current frame checking that
+        // the RAF callback has not
+        // yet been fired.
+        fastdom.write(function() {
+          assert(!callback.called);
+          done();
+        });
+
+        // Should not have scheduled a new frame
+        assert(fastdom.frames.length === 0);
+      });
+    });
+  });
+
+  test('Should schedule a new frame when a read is requested in a nested write', function(done) {
+    var fastdom = new FastDom();
+
+    fastdom.read(function() {
+      fastdom.write(function() {
+        fastdom.read(function(){});
+
+        // Should have scheduled a new frame
+        assert(fastdom.frames.length === 1);
+        done();
+      });
+    });
+  });
+
+  test('Should run nested reads in the same frame', function(done) {
+    var fastdom = new FastDom();
+    var callback = sinon.spy();
+
+    fastdom.read(function() {
+      fastdom.read(function() {
+        fastdom.read(function() {
+          fastdom.read(function() {
+
+            // Should not have scheduled a new frame
+            assert(fastdom.frames.length === 0);
+            done();
+          });
+        });
+      });
+    });
+  });
+
+  test('Should run nested writes in the same frame', function(done) {
+    var fastdom = new FastDom();
+    var callback = sinon.spy();
+
+    fastdom.write(function() {
+      fastdom.write(function() {
+        fastdom.write(function() {
+          fastdom.write(function() {
+
+            // Should not have scheduled a new frame
+            assert(fastdom.frames.length === 0);
+            done();
+          });
+        });
+      });
+    });
+  });
+
   test('Should call a "read" callback with the given context', function(done) {
     var fastdom = new FastDom();
     var cb = sinon.spy();

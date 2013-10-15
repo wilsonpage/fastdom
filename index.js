@@ -6,6 +6,12 @@
  * by batching DOM read/write
  * interactions.
  *
+ * ISSUE:
+ *
+ * When mode is 'reading' and a write
+ * comes in, it is currently scheduling
+ * a new frame.
+ *
  * @author Wilson Page <wilsonpage@me.com>
  */
 
@@ -40,11 +46,11 @@
   function FastDom() {
     this.frames = [];
     this.lastId = 0;
-    this.mode = null;
     this.batch = {
       hash: {},
       read: [],
-      write: []
+      write: [],
+      mode: null
     };
   }
 
@@ -58,17 +64,24 @@
    */
   FastDom.prototype.read = function(fn, ctx) {
     var job = this.add('read', fn, ctx);
+    var id = job.id;
 
+    // Add this job to the read queue
     this.batch.read.push(job.id);
 
-    // If we're writing and a 'read' job
-    // comes in, we do have to schedule a new frame
-    var needsFrame = !this.batchPending || this.mode === 'writing';
+    // We should *not* schedule a new frame if:
+    // 1. We're 'reading'
+    // 2. A frame is already scheduled
+    var doesntNeedFrame = this.batch.mode === 'reading'
+      || this.batch.scheduled;
 
-    // Schedule a new frame if need be
-    if (needsFrame) this.scheduleBatch();
+    // If a frame isn't needed, return
+    if (doesntNeedFrame) return id;
 
-    return job.id;
+    // Schedule a new
+    // frame, then return
+    this.scheduleBatch();
+    return id;
   };
 
   /**
@@ -81,21 +94,27 @@
    */
   FastDom.prototype.write = function(fn, ctx) {
     var job = this.add('write', fn, ctx);
+    var mode = this.batch.mode;
+    var id = job.id;
 
+    // Push the job id into the queue
     this.batch.write.push(job.id);
 
-    // If we're emptying the read
-    // batch and a write comes in,
-    // we don't need to schedule a
-    // new frame. If we're writing
-    // and write comes in we don't
-    // need to schedule a new frame
-    var needsFrame = !this.batchPending;
+    // We should *not* schedule a new frame if:
+    // 1. We are 'writing'
+    // 2. We are 'reading'
+    // 3. A frame is already scheduled.
+    var doesntNeedFrame = mode === 'writing'
+      || mode === 'reading'
+      || this.batch.scheduled;
 
-    // Schedule a new frame if need be
-    if (needsFrame) this.scheduleBatch();
+    // If a frame isn't needed, return
+    if (doesntNeedFrame) return id;
 
-    return job.id;
+    // Schedule a new
+    // frame, then return
+    this.scheduleBatch();
+    return id;
   };
 
   /**
@@ -178,13 +197,13 @@
 
     // Schedule batch for next frame
     this.schedule(0, function() {
+      self.batch.scheduled = false;
       self.runBatch();
-      self.batchPending = false;
     });
 
     // Set flag to indicate
     // a frame has been scheduled
-    this.batchPending = true;
+    this.batch.scheduled = true;
   };
 
   /**
@@ -227,15 +246,15 @@
 
     // Set the mode to 'reading',
     // then empty all read jobs
-    this.mode = 'reading';
+    this.batch.mode = 'reading';
     this.flush(this.batch.read);
 
     // Set the mode to 'writing'
     // then empty all write jobs
-    this.mode = 'writing';
+    this.batch.mode = 'writing';
     this.flush(this.batch.write);
 
-    this.mode = null;
+    this.batch.mode = null;
   };
 
   /**
