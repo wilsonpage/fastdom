@@ -6,12 +6,6 @@
  * by batching DOM read/write
  * interactions.
  *
- * ISSUE:
- *
- * When mode is 'reading' and a write
- * comes in, it is currently scheduling
- * a new frame.
- *
  * @author Wilson Page <wilsonpage@me.com>
  */
 
