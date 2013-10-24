@@ -333,17 +333,24 @@
     raf(function frame() {
       var fn = self.frames.shift();
 
-      // Run the frame
-      if (fn) fn();
-
       // If no more frames,
       // stop looping
       if (!self.frames.length) {
         self.looping = false;
-        return;
+
+      // Otherwise, schedule the
+      // next frame
+      } else {
+        raf(frame);
       }
 
-      raf(frame);
+      // Run the frame.  Note that
+      // this may throw an error
+      // in user code, but all
+      // fastdom tasks are dealt
+      // with already so the code
+      // will continue to iterate
+      if (fn) fn();
     });
 
     this.looping = true;
