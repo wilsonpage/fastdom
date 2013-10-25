@@ -98,7 +98,7 @@ suite('set', function() {
       // Schedule a callback for *next* frame
       raf(cb);
 
-      // Schedule a write that should be
+      // Schedule a read that should be
       // called in the next frame, meaning
       // the test callback should have already
       // been called.
@@ -107,8 +107,8 @@ suite('set', function() {
         done();
       });
 
-      // Should not have scheduled a new frame
-      assert(fastdom.frames.length === 1);
+      // Should have scheduled a new frame
+      assert(fastdom.frames.length === 1, 'the is one pending frame');
     });
   });
 

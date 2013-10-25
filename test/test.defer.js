@@ -107,4 +107,59 @@ suite('defer', function(){
       });
     });
   });
+
+  test('Should run the next frame even if frame before it errors', function(done) {
+    var fastdom = new FastDom();
+    var frame = fastdom.frame;
+    var error = sinon.stub().throws();
+    var callback = sinon.spy();
+
+
+    sinon.stub(fastdom, 'frame', function() {
+      try {
+        frame.call(fastdom);
+      } catch (e) {}
+    });
+
+    fastdom.defer(error);
+    fastdom.defer(callback);
+
+    raf(function() {
+      raf(function() {
+        assert(callback.called, 'The second job was run');
+        done();
+      });
+    });
+  });
+
+  test.only('Should continue to run future jobs when the last frame errors', function(done) {
+    var fastdom = new FastDom();
+    var frame = fastdom.frame;
+    var error = sinon.stub().throws();
+    var callback1 = sinon.spy();
+    var callback2 = sinon.spy();
+
+    sinon.stub(fastdom, 'frame', function() {
+      try { frame.call(fastdom); } catch (e) {}
+    });
+
+    fastdom.defer(callback1);
+    fastdom.defer(error);
+
+    setTimeout(function() {
+      fastdom.defer(callback2);
+    }, 100);
+
+    raf(function() {
+      assert(callback1.called, 'the first job was run');
+      raf(function() {
+        setTimeout(function(){
+          raf(function() {
+            assert(callback2.called, 'the third job was run');
+            done();
+          });
+        }, 100);
+      });
+    });
+  });
 });
