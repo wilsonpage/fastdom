@@ -232,30 +232,42 @@
    */
   FastDom.prototype.flush = function(list) {
     var id;
+
     while (id = list.shift()) {
       this.run(this.batch.hash[id]);
     }
   };
 
   /**
-   * Runs any read jobs followed
-   * by any write jobs.
+   * Runs any 'read' jobs followed
+   * by any 'write' jobs.
+   *
+   * We run this inside a try catch
+   * so that if any jobs error, we
+   * are able to recover and continue
+   * to flush the batch until it's empty.
    *
    * @api private
    */
   FastDom.prototype.runBatch = function() {
+    try {
 
-    // Set the mode to 'reading',
-    // then empty all read jobs
-    this.batch.mode = 'reading';
-    this.flush(this.batch.read);
+      // Set the mode to 'reading',
+      // then empty all read jobs
+      this.batch.mode = 'reading';
+      this.flush(this.batch.read);
 
-    // Set the mode to 'writing'
-    // then empty all write jobs
-    this.batch.mode = 'writing';
-    this.flush(this.batch.write);
+      // Set the mode to 'writing'
+      // then empty all write jobs
+      this.batch.mode = 'writing';
+      this.flush(this.batch.write);
 
-    this.batch.mode = null;
+      this.batch.mode = null;
+
+    } catch (e) {
+      this.runBatch();
+      throw e;
+    }
   };
 
   /**
