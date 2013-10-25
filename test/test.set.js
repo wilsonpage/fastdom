@@ -284,7 +284,7 @@ suite('set', function() {
   });
 
 
-  test.only('Should continue to flush the queue until empty even if a job errors', function(done) {
+  test('Should continue to flush the queue until empty even if a job errors', function(done) {
     var fastdom = new FastDom();
     var read = sinon.spy();
     var write = sinon.spy();
