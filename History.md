@@ -1,4 +1,9 @@
 
+0.8.4 / 2013-10-25
+==================
+
+  * fix - ensure that exceptions thrown inside a read/write job don't prevent the rest of the jobs being flushed.
+
 0.8.3 / 2013-10-25
 ==================
 
