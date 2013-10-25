@@ -1,4 +1,9 @@
 
+0.8.3 / 2013-10-25
+==================
+
+  * fix - ensure rAF loop can continue when error is thrown inside job.
+
 0.8.2 / 2013-10-15
 ==================
 
