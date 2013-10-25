@@ -282,4 +282,38 @@ suite('set', function() {
       done();
     });
   });
+
+
+  test.only('Should continue to flush the queue until empty even if a job errors', function(done) {
+    var fastdom = new FastDom();
+    var read = sinon.spy();
+    var write = sinon.spy();
+    var flush = fastdom.runBatch;
+    var error = sinon.stub().throws();
+    var errorsThrown = false;
+
+    sinon.stub(fastdom, 'runBatch', function() {
+      try {
+        flush.apply(fastdom, arguments);
+      } catch (e) {
+        errorsThrown = true;
+      }
+    });
+
+    fastdom.read(read);
+    fastdom.write(write);
+    fastdom.read(error);
+    fastdom.read(read);
+    fastdom.write(error);
+    fastdom.write(write);
+
+    raf(function() {
+      assert(read.calledTwice, 'the callback was called both times');
+      assert(write.calledTwice, 'the callback was called both times');
+      assert(fastdom.batch.read.length === 0, 'the queue is empty');
+      assert(fastdom.batch.write.length === 0, 'the queue is empty');
+      assert(errorsThrown, 'real errors were thrown');
+      done();
+    });
+  });
 });
