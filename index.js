@@ -1,4 +1,3 @@
-
 /**
  * FastDom
  *
@@ -57,7 +56,7 @@
 
   /**
    * Adds a job to the
-   * write batch and schedules
+   * read batch and schedules
    * a new frame if need be.
    *
    * @param  {Function} fn
@@ -338,7 +337,7 @@
   };
 
   /**
-   * Starts of a rAF loop
+   * Starts a rAF loop
    * to empty the frame queue.
    *
    * @api private
