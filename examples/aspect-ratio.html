@@ -20,6 +20,7 @@
 <body>
   <label>Number of elements <input id="input" type="text" value="100" /></label>
   <button id="withoutFastDom">Run without FastDom</button>
+  <button id="withRequestAnimationFrame">Run with requestAnimationFrame</button>
   <button id="withFastDom">Run with FastDom</button>
   <button id="resetbtn">reset</button>
   <section id="perf"></section>
@@ -56,6 +57,25 @@
       }
     }
 
+    function setAspectRequestAnimationFrame(div, i) {
+      var aspect = 9/16;
+      var isLast = i === (n - 1);
+
+      // READ
+      requestAnimationFrame(function() {
+        var h = div.clientWidth * aspect;
+
+        // WRITE
+        requestAnimationFrame(function() {
+          div.style.height = h + 'px';
+
+          if (isLast) {
+            displayPerf(performance.now() - start);
+          }
+        });
+      });
+    }
+
     function setAspectFastDom(div, i) {
       var aspect = 9/16;
       var isLast = i === (n - 1);
@@ -89,6 +109,12 @@
       reset();
       start = performance.now();
       divs.forEach(setAspectFastDom);
+    };
+
+    withRequestAnimationFrame.onclick = function() {
+      reset();
+      start = performance.now();
+      divs.forEach(setAspectRequestAnimationFrame);
     };
 
     resetbtn.onclick = reset;
