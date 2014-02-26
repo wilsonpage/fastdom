@@ -46,7 +46,7 @@
 
     function setAspect(div, i) {
       var aspect = 9/16;
-      var isLast = i === (n - 1)
+      var isLast = i === (n - 1);
       var h = div.clientWidth * aspect;
 
       div.style.height = h + 'px';
@@ -58,7 +58,7 @@
 
     function setAspectFastDom(div, i) {
       var aspect = 9/16;
-      var isLast = i === (n - 1)
+      var isLast = i === (n - 1);
 
       // READ
       fastdom.read(function() {
