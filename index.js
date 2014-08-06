@@ -19,17 +19,6 @@
     || window.msRequestAnimationFrame
     || function(cb) { return window.setTimeout(cb, 1000 / 60); };
 
-  // Normalize cAF
-  var caf = window.cancelAnimationFrame
-    || window.cancelRequestAnimationFrame
-    || window.mozCancelAnimationFrame
-    || window.mozCancelRequestAnimationFrame
-    || window.webkitCancelAnimationFrame
-    || window.webkitCancelRequestAnimationFrame
-    || window.msCancelAnimationFrame
-    || window.msCancelRequestAnimationFrame
-    || function(id) { window.clearTimeout(id); };
-
   /**
    * Creates a fresh
    * FastDom instance.
