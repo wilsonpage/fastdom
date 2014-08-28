@@ -1,4 +1,4 @@
-# fastdom [![Build Status](https://travis-ci.org/wilsonpage/fastdom.png?branch=master)](https://travis-ci.org/wilsonpage/fastdom)
+# fastdom [![Build Status](https://travis-ci.org/wilsonpage/fastdom.svg?branch=master)](https://travis-ci.org/wilsonpage/fastdom)
 
 Eliminates layout thrashing by batching DOM read/write operations (~750 bytes gzipped).
 
