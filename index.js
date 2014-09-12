@@ -49,7 +49,6 @@
    * a new frame if need be.
    *
    * @param  {Function} fn
-   * @api public
    */
   FastDom.prototype.read = function(fn, ctx) {
     var job = this.add('read', fn, ctx);
@@ -79,7 +78,6 @@
    * a new frame if need be.
    *
    * @param  {Function} fn
-   * @api public
    */
   FastDom.prototype.write = function(fn, ctx) {
     var job = this.add('write', fn, ctx);
@@ -117,7 +115,6 @@
    *
    * @param  {Number}   frame
    * @param  {Function} fn
-   * @api public
    */
   FastDom.prototype.defer = function(frame, fn, ctx) {
 
@@ -144,7 +141,6 @@
    * 'write' or 'defer' job.
    *
    * @param  {Number} id
-   * @api public
    */
   FastDom.prototype.clear = function(id) {
 
@@ -168,7 +164,6 @@
    * Clears a scheduled frame.
    *
    * @param  {Function} frame
-   * @api private
    */
   FastDom.prototype.clearFrame = function(frame) {
     var index = this.frames.indexOf(frame);
@@ -178,8 +173,6 @@
   /**
    * Schedules a new read/write
    * batch if one isn't pending.
-   *
-   * @api private
    */
   FastDom.prototype.scheduleBatch = function() {
     var self = this;
@@ -200,7 +193,6 @@
    * id for a job.
    *
    * @return {Number}
-   * @api private
    */
   FastDom.prototype.uniqueId = function() {
     return ++this.lastId;
@@ -216,7 +208,6 @@
    * current `this` is used.
    *
    * @param  {Array} list
-   * @api private
    */
   FastDom.prototype.flush = function(list) {
     var id;
@@ -234,8 +225,6 @@
    * so that if any jobs error, we
    * are able to recover and continue
    * to flush the batch until it's empty.
-   *
-   * @api private
    */
   FastDom.prototype.runBatch = function() {
     try {
@@ -266,7 +255,6 @@
    * @param {Function} fn
    * @param {Object}   ctx
    * @returns {Number} id
-   * @api private
    */
   FastDom.prototype.add = function(type, fn, ctx) {
     var id = this.uniqueId();
@@ -299,7 +287,6 @@
    *   };
    *
    * @param  {Object} job
-   * @api private
    */
   FastDom.prototype.run = function(job){
     var ctx = job.ctx || this;
@@ -328,8 +315,6 @@
   /**
    * Starts a rAF loop
    * to empty the frame queue.
-   *
-   * @api private
    */
   FastDom.prototype.loop = function() {
     var self = this;
