@@ -1,7 +1,7 @@
 {
   "name": "fastdom",
   "description": "Eliminates layout thrashing by batching DOM read/write operations",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "main": "index.js",
   "scripts": {
     "test": "jshint . && mocha-phantomjs test/index.html"
