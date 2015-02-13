@@ -6,7 +6,7 @@
 <style>
 
   * {
-    box-sizing: border-box; 
+    box-sizing: border-box;
   }
 
   div {
@@ -25,28 +25,37 @@
   <button id="resetbtn">reset</button>
   <section id="perf"></section>
   <section id="container"></section>
-  <script type="text/javascript" src="../index.js"></script>
+  <script src="../fastdom.js"></script>
   <script>
     var n;
     var start;
     var divs;
 
     // Setup
-    function reset() {
+    function reset(done) {
       n = input.value;
       divs = [];
-      container.innerHTML = '';
 
-      for (var i = 0; i < n; i++) {
-        var div = document.createElement('div');
-        div.style.width = Math.round(Math.random() * window.innerWidth) + 'px';
-        container.appendChild(div);
-        divs.push(div);
-      }
+      fastdom.measure(function() {
+        var winWidth = window.innerWidth;
+
+        fastdom.mutate(function() {
+          container.innerHTML = '';
+
+          for (var i = 0; i < n; i++) {
+            var div = document.createElement('div');
+            div.style.width = Math.round(Math.random() * winWidth) + 'px';
+            container.appendChild(div);
+            divs.push(div);
+          }
+
+          if (done) done();
+        });
+      });
     }
 
     function setAspect(div, i) {
-      var aspect = 9/16;
+      var aspect = 9 / 16;
       var isLast = i === (n - 1);
       var h = div.clientWidth * aspect;
 
@@ -58,7 +67,7 @@
     }
 
     function setAspectRequestAnimationFrame(div, i) {
-      var aspect = 9/16;
+      var aspect = 9 / 16;
       var isLast = i === (n - 1);
 
       // READ
@@ -77,15 +86,15 @@
     }
 
     function setAspectFastDom(div, i) {
-      var aspect = 9/16;
+      var aspect = 9 / 16;
       var isLast = i === (n - 1);
 
       // READ
-      fastdom.read(function() {
+      fastdom.measure(function() {
         var h = div.clientWidth * aspect;
 
         // WRITE
-        fastdom.write(function() {
+        fastdom.mutate(function() {
           div.style.height = h + 'px';
 
           if (isLast) {
@@ -100,24 +109,29 @@
     }
 
     withoutFastDom.onclick = function() {
-      reset();
-      start = performance.now();
-      divs.forEach(setAspect);
+      reset(function() {
+        start = performance.now();
+        divs.forEach(setAspect);
+      });
     };
 
     withFastDom.onclick = function() {
-      reset();
-      start = performance.now();
-      divs.forEach(setAspectFastDom);
+      reset(function() {
+        start = performance.now();
+        divs.forEach(setAspectFastDom);
+      });
     };
 
     withRequestAnimationFrame.onclick = function() {
-      reset();
-      start = performance.now();
-      divs.forEach(setAspectRequestAnimationFrame);
+      reset(function() {
+        start = performance.now();
+        divs.forEach(setAspectRequestAnimationFrame);
+      });
     };
 
-    resetbtn.onclick = reset;
+    resetbtn.onclick = function() {
+      reset();
+    };
   </script>
 </body>
 </html>

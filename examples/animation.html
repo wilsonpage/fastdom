@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>FastDom: Animation Example</title>
-		<script type="text/javascript" src="../index.js"></script>
+		<script type="text/javascript" src="../fastdom.min.js"></script>
 	</head>
 	<body>
 
@@ -53,21 +53,25 @@
 				},
 				async: function(m) {
 
-					// Use fastdom to batch the reads and writes with exactly the same code as the 'sync' routine
-					fastdom.read(function() {
+					// Use fastdom to batch the reads
+					// and writes with exactly the same
+					// code as the 'sync' routine
+					fastdom.measure(function() {
 						var top = movers[m].offsetTop;
-						fastdom.write(function() {
+						fastdom.mutate(function() {
 							mover.setLeft(movers[m], top);
 						});
 					});
 				},
 				noread: function(m) {
 
-					// Simply use the array index as the top value, so no DOM read is required
+					// Simply use the array index
+					// as the top value, so no DOM
+					// read is required
 					mover.setLeft(movers[m], m);
 				},
 				setLeft: function(mover, top) {
-					mover.style.left = ((Math.sin(top + timestamp/1000) + 1) * 500) + 'px';
+					mover.style.transform = 'translateX( ' +((Math.sin(top + timestamp/1000) + 1) * 500) + 'px)';
 				}
 			};
 

@@ -1,21 +1,21 @@
-# fastdom [![Build Status](https://travis-ci.org/wilsonpage/fastdom.svg?branch=master)](https://travis-ci.org/wilsonpage/fastdom)
+# fastdom [![Build Status](https://travis-ci.org/wilsonpage/fastdom.svg?branch=master)](https://travis-ci.org/wilsonpage/fastdom) [![Coverage Status](https://coveralls.io/repos/wilsonpage/fastdom/badge.svg?branch=v1-beta&service=github)](https://coveralls.io/github/wilsonpage/fastdom?branch=v1-beta)
 
-Eliminates layout thrashing by batching DOM read/write operations (~750 bytes gzipped).
+Eliminates layout thrashing by batching DOM read/write operations (580 bytes gzipped compressed).
 
 ```js
-fastdom.read(function() {
+fastdom.measure(function() {
   console.log('read');
 });
 
-fastdom.write(function() {
+fastdom.mutate(function() {
   console.log('write');
 });
 
-fastdom.read(function() {
+fastdom.measure(function() {
   console.log('read');
 });
 
-fastdom.write(function() {
+fastdom.mutate(function() {
   console.log('write');
 });
 ```
@@ -38,22 +38,20 @@ write
 
 FastDom is CommonJS and AMD compatible, you can install it in one of the following ways:
 
-``` sh
+```sh
 $ npm install fastdom
 ```
-``` sh
+```sh
 $ bower install fastdom
 ```
-``` sh
-$ component install wilsonpage/fastdom
-```
-or [download](http://github.com/wilsonpage/fastdom/raw/master/index.js).
+
+or [download](http://github.com/wilsonpage/fastdom/raw/master/fastdom.js).
 
 ## How it works
 
-FastDom works as a regulatory layer between your app/library and the DOM. By batching DOM access we **avoid unnecessary document reflows and speed up layout perfomance dramatically**.
+FastDom works as a regulatory layer between your app/library and the DOM. By batching DOM access we **avoid unnecessary document reflows** and dramatically **speed up layout perfomance**.
 
-Each read/write job is added to a corresponding read/write queue. The queues are emptied (reads, then writes) at the turn of the next frame using [`window.requestAnimationFrame`](https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame).
+Each measure/mutate job is added to a corresponding measure/mutate queue. The queues are emptied (reads, then writes) at the turn of the next frame using [`window.requestAnimationFrame`](https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame).
 
 FastDom aims to behave like a singleton across *all* modules in your app. When any module requires `'fastdom'` they  get the same instance back, meaning FastDom can harmonize DOM access app-wide.
 
@@ -61,47 +59,24 @@ Potentially a third-party library could depend on FastDom, and better integrate 
 
 ## API
 
-### FastDom#read(callback[, context])
+### FastDom#measure(callback[, context])
 
-Schedules a job for the 'read' queue. Returns a unique ID that can be used to clear the scheduled job.
+Schedules a job for the 'measure' queue. Returns a unique ID that can be used to clear the scheduled job.
 
 ```js
-fastdom.read(function() {
+fastdom.measure(function() {
   var width = element.clientWidth;
 });
 ```
 
-### FastDom#write(callback[, context])
+### FastDom#mutate(callback[, context])
 
-Schedules a job for the 'write' queue. Returns a unique ID that can be used to clear the scheduled job.
+Schedules a job for the 'mutate' queue. Returns a unique ID that can be used to clear the scheduled job.
 
 ```js
-fastdom.write(function() {
+fastdom.mutate(function() {
   element.style.width = width + 'px';
 });
-```
-
-### FastDom#defer([frames,] callback[, context])
-
-Defers a job for the number of frames specified. This is useful if you have a particualrly expensive piece of work to do, and don't want it to be done with all the other work.
-
-For example; you are using third party library that doesn't expose an API that allows you split DOM read/write work, `fastdom.defer()` will push this work futher into the future and prevent it from disrupting other carefully batched work.
-
-```js
-fastdom.defer(3, expensiveStuff);
-```
-
-`FastDom#defer` can also be called without the `frames` argument to push work onto next available frame.
-
-```js
-// Runs in frame 1
-fastdom.defer(expensiveStuff1);
-
-// Runs in frame 2
-fastdom.defer(expensiveStuff2);
-
-// Runs in frame 3
-fastdom.defer(expensiveStuff3);
 ```
 
 ### FastDom#clear(id)
@@ -109,38 +84,116 @@ fastdom.defer(expensiveStuff3);
 Clears **any** scheduled job.
 
 ```js
-var read = fastdom.read(function(){});
-var write = fastdom.write(function(){});
-var defer = fastdom.defer(4, function(){});
+var read = fastdom.measure(function(){});
+var write = fastdom.mutate(function(){});
 
 fastdom.clear(read);
 fastdom.clear(write);
-fastdom.clear(defer);
 ```
+
+## Strict mode
+
+It's very important that all DOM mutations or measurements go through `fastdom` to ensure good performance; to help you with this we wrote `fastdom-strict`. When `fastdom-strict.js` is loaded, it will throw errors when sensitive DOM APIs are called at the wrong time.
+
+This is useful when working with a large team who might not all be aware of `fastdom` or its benefits. It can also prove useful for catching 'un-fastdom-ed' code when migrating an app to `fastdom`.
+
+```html
+<script src="fastdom.js"></script>
+<script src="fastdom-strict.js"></script>
+```
+
+```js
+element.clientWidth; // throws
+fastdom.mutate(function() { element.clientWidth; }); // throws
+fastdom.measure(function() { element.clientWidth; }); // does not throw
+```
+
+```js
+"Error: Can only get .clientWidth during 'measure' phase"
+```
+
+> `fastdom-strict` will not throw if nodes are not attached to the document.
+
+You should use `fastdom-strict` in develelopment to catch rendering performance issues before they hit production. It is not advisable to use `fastdom-strict` in production.
 
 ## Exceptions
 
-FastDom is async, this can therefore mean that when a job comes around to being executed, the node you were working with may no longer be there. These errors are usually not critical, but they can cripple your app. FastDom allows you to register an `onError` handler. If `fastdom.onError` has been registered, FastDom will catch any errors that occur in your jobs, and run the handler instead.
+FastDom is async, this can therefore mean that when a job comes around to being executed, the node you were working with may no longer be there. These errors are usually not critical, but they can cripple your app.
+
+FastDom allows you to register an `catch` handler. If `fastdom.catch` has been registered, FastDom will catch any errors that occur in your jobs, and run the handler instead.
 
 ```js
-fastdom.onError = function(error) {
+fastdom.catch = function(error) {
   // Do something if you want
 };
 
 ```
 
+## Extensions
+
+The core fastdom library is designed to be as light as possible. Additional functionality can be bolted on in the form of 'extensions'. It's worth noting that Fastdom is a 'singleton' by design, so all tasks (even those scheduled by extensions) will reach the same global task queue.
+
+**Fastdom ships with some extensions:**
+
+- [`fastdom-promised`](extensions/fastdom-promised.js) - Adds Promise based API
+- [`fastdom-sandbox`](extensions/fastdom-sandbox.js) - Adds task grouping concepts
+
+### Using an extension
+
+Use the `.extend()` method to extend the current `fastdom` to create a new object.
+
+```html
+<script src="fastdom.js"></script>
+<script src="extensions/fastdom-promised.js"></script>
+```
+
+```js
+var myFastdom = fastdom.extend(fastdomPromised);
+
+myFastdom.mutate(...).then(...);
+```
+
+Extensions can be chained to construct a fully customised `fastdom`.
+
+```js
+var myFastdom = fastdom
+  .extend(fastdomPromised)
+  .extend(fastdomSandbox);
+```
+
+### Writing an extension
+
+```js
+var myFastdom = fastdom.extend({
+  measure: function(fn, ctx) {
+    // do custom stuff ...
+
+    // then call the parent method
+    return this.fastdom.measure(fn, ctx);
+  },
+
+  mutate: ...
+});
+```
+
+You'll notice `this.fastdom` references the parent `fastdom`. If you're extending a core API and aren't calling the parent method, you're doing something wrong.
+
+When distributing an extension only export a plain object to allow users to compose their own `fastdom`.
+
+```js
+module.exports = {
+  measure: ...,
+  mutate: ...,
+  clear: ...
+};
+```
+
 ## Tests
 
-#### With PhantomJS
-
-``` sh
+```sh
 $ npm install
 $ npm test
 ```
-
-#### Without PhantomJS
-
-Open `test/index.html` in your browser.
 
 ## Author
 
@@ -149,6 +202,8 @@ Open `test/index.html` in your browser.
 ## Contributors
 
 - **Wilson Page** - [@wilsonpage](http://twitter.com/wilsonpage)
+- **Paul Irish** - [@paul_irish](http://github.com/paul_irish)
+- **Kornel Lesinski** - [@pornel](http://github.com/pornel)
 - **George Crawford** - [@georgecrawford](http://github.com/georgecrawford)
 
 ## License
