@@ -13,11 +13,9 @@
   'use strict';
 
   // Normalize rAF
-  var raf = window.requestAnimationFrame
-    || window.webkitRequestAnimationFrame
-    || window.mozRequestAnimationFrame
-    || window.msRequestAnimationFrame
-    || function(cb) { return window.setTimeout(cb, 1000 / 60); };
+  var raf = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || function(cb) {
+    return window.setTimeout(cb, 16);
+  };
 
   /**
    * Creates a fresh
