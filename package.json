@@ -21,6 +21,8 @@
     "jshint": "~2.1.0",
     "sinon": "~1.7.3",
     "chai": "~1.7.2",
-    "mocha-phantomjs": "~3.1.2"
+    "mocha-phantomjs": "~3.1.2",
+    "phantomjs": "*",
+    "polyfill-function-prototype-bind": "0.0.1"
   }
 }

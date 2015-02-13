@@ -67,7 +67,7 @@
 					mover.setLeft(movers[m], m);
 				},
 				setLeft: function(mover, top) {
-					mover.style.left = ((Math.sin(top + timestamp/1000) + 1) * 500) + 'px';
+					mover.style.transform = 'translateX( ' +((Math.sin(top + timestamp/1000) + 1) * 500) + 'px)';
 				}
 			};
 
