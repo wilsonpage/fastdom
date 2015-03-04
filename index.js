@@ -158,9 +158,9 @@
     var deferredTimeLimit = 12;
 
     try {
-      if (this.runBatch(this.reads, start, readBatchTimeLimit)) {
-        if (this.runBatch(this.writes, start, writeBatchTimeLimit)) {
-          this.runBatch(this.deferred, start, deferredTimeLimit);
+      if (this.runBatch(this.reads, 10000, start, readBatchTimeLimit)) {
+        if (this.runBatch(this.writes, 10000, start, writeBatchTimeLimit)) {
+          this.runBatch(this.deferred, this.deferred.length, start, deferredTimeLimit); // deferred.length ensures newly deferred jobs aren't run immediately
         }
       }
     } catch (e) {
@@ -191,9 +191,9 @@
    *
    * @private
    */
-  FastDom.prototype.runBatch = function(list, start, frameTimeLimit) {
+  FastDom.prototype.runBatch = function(list, maxJobs, start, frameTimeLimit) {
     var job;
-    while (job = list.shift()) {
+    while (maxJobs-- && (job = list.shift())) {
       job.fn.call(job.ctx);
       var took = Date.now() - start;
       if (took > frameTimeLimit) {
