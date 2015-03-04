@@ -163,17 +163,6 @@
   };
 
   /**
-   * Clears a scheduled frame.
-   *
-   * @param  {Function} frame
-   * @private
-   */
-  FastDom.prototype.clearFrame = function(frame) {
-    var index = this.frames.indexOf(frame);
-    if (~index) this.frames.splice(index, 1);
-  };
-
-  /**
    * Schedules a new read/write
    * batch if one isn't pending.
    *
@@ -191,17 +180,6 @@
     // Set flag to indicate
     // a frame has been scheduled
     this.batch.scheduled = true;
-  };
-
-  /**
-   * Generates a unique
-   * id for a job.
-   *
-   * @return {Number}
-   * @private
-   */
-  FastDom.prototype.uniqueId = function() {
-    return ++this.lastId;
   };
 
   /**
@@ -256,25 +234,6 @@
     }
   };
 
-  /**
-   * Adds a new job to
-   * the given batch.
-   *
-   * @param {Array}   list
-   * @param {Function} fn
-   * @param {Object}   ctx
-   * @returns {Number} id
-   * @private
-   */
-  FastDom.prototype.add = function(type, fn, ctx) {
-    var id = this.uniqueId();
-    return this.batch.hash[id] = {
-      id: id,
-      fn: fn,
-      ctx: ctx,
-      type: type
-    };
-  };
 
   /**
    * Runs a given job.
@@ -360,36 +319,6 @@
     });
 
     this.looping = true;
-  };
-
-  /**
-   * Adds a function to
-   * a specified index
-   * of the frame queue.
-   *
-   * @param  {Number}   index
-   * @param  {Function} fn
-   * @return {Function}
-   * @private
-   */
-  FastDom.prototype.schedule = function(index, fn) {
-
-    // Make sure this slot
-    // hasn't already been
-    // taken. If it has, try
-    // re-scheduling for the next slot
-    if (this.frames[index]) {
-      return this.schedule(index + 1, fn);
-    }
-
-    // Start the rAF
-    // loop to empty
-    // the frame queue
-    this.loop();
-
-    // Insert this function into
-    // the frames queue and return
-    return this.frames[index] = fn;
   };
 
   // We only ever want there to be
