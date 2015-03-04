@@ -43,31 +43,6 @@ suite('defer', function(){
     });
   });
 
-  test('Should run each job on a different frame.', function(done) {
-    var fastdom = new FastDom();
-    var callback1 = sinon.spy();
-    var callback2 = sinon.spy();
-    var callback3 = sinon.spy();
-
-    fastdom.defer(callback1);
-    fastdom.defer(callback2);
-    fastdom.defer(callback3);
-
-    raf(function() {
-      assert(callback1.called);
-      assert(!callback2.called);
-      assert(!callback3.called);
-      raf(function() {
-        assert(callback2.called);
-        assert(!callback3.called);
-        raf(function() {
-          assert(callback3.called);
-          done();
-        });
-      });
-    });
-  });
-
   test('Should run fill empty frames before later work is run.', function(done) {
     var fastdom = new FastDom();
     var callback1 = sinon.spy();
@@ -79,13 +54,13 @@ suite('defer', function(){
     fastdom.defer(3, callback3);
 
     // Frame 1
-    fastdom.defer(callback1);
+    fastdom.defer(1, callback1);
 
     // Frame 2
-    fastdom.defer(callback2);
+    fastdom.defer(2, callback2);
 
     // Frame 4
-    fastdom.defer(callback4);
+    fastdom.defer(4, callback4);
 
     raf(function() {
       assert(callback1.called);
