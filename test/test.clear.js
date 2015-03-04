@@ -87,7 +87,6 @@ suite('clear', function(){
       raf(function() {
         raf(function() {
           assert(!write.called);
-          assert(!fastdom.batch.hash[id]);
           done();
         });
       });

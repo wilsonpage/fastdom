@@ -59,9 +59,6 @@ suite('set', function() {
         assert(!cb.called);
         done();
       });
-
-      // Should not have scheduled a new frame
-      assert(fastdom.frames.length === 0);
     });
   });
 
@@ -83,9 +80,6 @@ suite('set', function() {
         assert(!cb.called);
         done();
       });
-
-      // Should not have scheduled a new frame
-      assert(fastdom.frames.length === 0);
     });
   });
 
@@ -106,9 +100,6 @@ suite('set', function() {
         assert(cb.called);
         done();
       });
-
-      // Should have scheduled a new frame
-      assert(fastdom.frames.length === 1, 'the is one pending frame');
     });
   });
 
@@ -131,9 +122,6 @@ suite('set', function() {
           assert(!callback.called);
           done();
         });
-
-        // Should not have scheduled a new frame
-        assert(fastdom.frames.length === 0);
       });
     });
   });
@@ -141,13 +129,15 @@ suite('set', function() {
   test('Should schedule a new frame when a read is requested in a nested write', function(done) {
     var fastdom = new FastDom();
 
+    fastdom.raf = sinon.spy(fastdom, 'raf');
+
     fastdom.read(function() {
       fastdom.write(function() {
-        fastdom.read(function(){});
-
-        // Should have scheduled a new frame
-        assert(fastdom.frames.length === 1);
-        done();
+        fastdom.read(function(){
+          // Should have scheduled a new frame
+          assert(fastdom.raf.calledTwice);
+          done();
+        });
       });
     });
   });
@@ -156,13 +146,15 @@ suite('set', function() {
     var fastdom = new FastDom();
     var callback = sinon.spy();
 
+    fastdom.raf = sinon.spy(fastdom, 'raf');
+
     fastdom.read(function() {
       fastdom.read(function() {
         fastdom.read(function() {
           fastdom.read(function() {
 
             // Should not have scheduled a new frame
-            assert(fastdom.frames.length === 0);
+            assert(fastdom.raf.calledOnce);
             done();
           });
         });
@@ -174,13 +166,15 @@ suite('set', function() {
     var fastdom = new FastDom();
     var callback = sinon.spy();
 
+    fastdom.raf = sinon.spy(fastdom, 'raf');
+
     fastdom.write(function() {
       fastdom.write(function() {
         fastdom.write(function() {
           fastdom.write(function() {
 
             // Should not have scheduled a new frame
-            assert(fastdom.frames.length === 0);
+            assert(fastdom.raf.calledOnce);
             done();
           });
         });
@@ -213,16 +207,18 @@ suite('set', function() {
   test('Should have empty job hash when batch complete', function(done) {
     var fastdom = new FastDom();
 
-    fastdom.read(function(){});
-    fastdom.read(function(){});
-    fastdom.write(function(){});
-    fastdom.write(function(){});
+    var ran = 0;
+
+    fastdom.read(function(){ran += 1;});
+    fastdom.read(function(){ran += 2;});
+    fastdom.write(function(){ran += 4;});
+    fastdom.write(function(){ran += 8;});
 
     // Check there are four jobs stored
-    assert.equal(objectLength(fastdom.batch.hash), 4);
+    assert.equal(ran, 0);
 
     raf(function() {
-      assert.equal(objectLength(fastdom.batch.hash), 0);
+      assert.equal(ran, 15);
       done();
     });
   });
@@ -274,11 +270,13 @@ suite('set', function() {
     var fastdom = new FastDom();
     var callback = sinon.spy();
 
+    fastdom.flush = sinon.spy(fastdom, 'flush');
+
     fastdom.read(callback);
 
     raf(function() {
       assert(callback.called);
-      assert(fastdom.looping === false);
+      assert(fastdom.flush.calledOnce);
       done();
     });
   });
@@ -313,6 +311,7 @@ suite('set', function() {
       assert(fastdom.batch.read.length === 0, 'the queue is empty');
       assert(fastdom.batch.write.length === 0, 'the queue is empty');
       assert(errorsThrown, 'real errors were thrown');
+      assert(fastdom.flush.calledOnce);
       done();
     });
   });
