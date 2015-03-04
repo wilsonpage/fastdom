@@ -15,7 +15,7 @@
 
   // Normalize rAF
   var raf = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || function(cb) {
-    return window.setTimeout(cb, 16);
+    return setTimeout(cb, 16);
   };
 
   /**
