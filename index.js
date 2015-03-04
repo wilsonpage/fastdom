@@ -29,7 +29,7 @@
     // on the instance allows
     // us to replace it with
     // a stub for testing.
-    this.raf = raf;
+    this.raf = raf.bind(window);
 
     this.reads = [];
     this.writes = [];
@@ -146,7 +146,7 @@
   FastDom.prototype.scheduleBatch = function() {
     if (this.scheduled) return;
     this.scheduled = true;
-    raf(this.flush);
+    this.raf(this.flush);
   };
 
   FastDom.prototype.flush = function() {
