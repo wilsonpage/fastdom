@@ -150,7 +150,6 @@
   };
 
   FastDom.prototype.flush = function() {
-    this.scheduled = false;
     var start = Date.now();
     var error;
 
@@ -168,6 +167,7 @@
       error = e;
     }
 
+    this.scheduled = false;
     if (this.reads.length || this.writes.length || this.deferred.length) {
       this.scheduleBatch();
     }
