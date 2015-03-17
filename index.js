@@ -143,7 +143,7 @@
    * Clears a scheduled 'read',
    * 'write' or 'defer' job.
    *
-   * @param  {Number} id
+   * @param  {Number|String} id
    * @public
    */
   FastDom.prototype.clear = function(id) {
@@ -152,6 +152,9 @@
     if (typeof id === 'function') {
       return this.clearFrame(id);
     }
+
+    // Allow ids to be passed as strings
+    id = Number(id);
 
     var job = this.batch.hash[id];
     if (!job) return;
