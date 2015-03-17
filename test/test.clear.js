@@ -93,4 +93,18 @@ suite('clear', function(){
       });
     });
   });
+
+  test('Should accept String ids', function(done) {
+    var fastdom = new FastDom();
+    var read = sinon.spy();
+
+    var id = fastdom.read(read);
+
+    fastdom.clear(id.toString());
+
+    raf(function() {
+      assert(!read.called);
+      done();
+    });
+  });
 });
