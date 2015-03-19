@@ -19,6 +19,19 @@
     || window.msRequestAnimationFrame
     || function(cb) { return window.setTimeout(cb, 1000 / 60); };
 
+  // Normalize indexOf
+  var indexOf = Array.prototype.indexOf || function (elem) {
+    var index = this.length;
+
+    while (index--) {
+      if (elem === this[index]) {
+        return index;
+      }
+    }
+
+    return -1;
+  };
+
   /**
    * Creates a fresh
    * FastDom instance.
@@ -160,7 +173,7 @@
     if (!job) return;
 
     var list = this.batch[job.type];
-    var index = list.indexOf(id);
+    var index = indexOf.call(list, id);
 
     // Clear references
     delete this.batch.hash[id];
@@ -174,7 +187,7 @@
    * @private
    */
   FastDom.prototype.clearFrame = function(frame) {
-    var index = this.frames.indexOf(frame);
+    var index = indexOf.call(this.frames, frame);
     if (~index) this.frames.splice(index, 1);
   };
 
