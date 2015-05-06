@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jshint . && testem ci",
-    "testem": "testem"
+    "testem": "testem",
+    "build": "uglifyjs -c -m -o index.min.js -- index.js"
   },
   "homepage": "https://github.com/wilsonpage/fastdom",
   "author": {
@@ -23,6 +24,7 @@
     "mocha": "~1.12.0",
     "mocha-phantomjs": "~3.1.2",
     "sinon": "~1.7.3",
-    "testem": "^0.8.3"
+    "testem": "^0.8.3",
+    "uglify-js": "^2.4.21"
   }
 }
