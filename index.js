@@ -12,12 +12,15 @@
 
   'use strict';
 
-  // Normalize rAF
-  var raf = window.requestAnimationFrame
-    || window.webkitRequestAnimationFrame
-    || window.mozRequestAnimationFrame
-    || window.msRequestAnimationFrame
-    || function(cb) { return window.setTimeout(cb, 1000 / 60); };
+  // Normalize requestAnimationFrame
+  var _Window = window,
+    requestAnimationFrame = _Window.requestAnimationFrame
+    || _Window.webkitRequestAnimationFrame
+    || _Window.mozRequestAnimationFrame
+    || _Window.msRequestAnimationFrame
+    || function (cb) {
+      return _Window.setTimeout(cb, 1000 / 60);
+    };
 
   /**
    * Creates a fresh
@@ -26,16 +29,15 @@
    * @constructor
    */
   function FastDom() {
-    this.frames = [];
-    this.lastId = 0;
-
-    // Placing the rAF method
+    var self = this;
+    self.frames = [];
+    self.lastId = 0;
+    // Placing the requestAnimationFrame method
     // on the instance allows
     // us to replace it with
     // a stub for testing.
-    this.raf = raf;
-
-    this.batch = {
+    self.rAF = requestAnimationFrame;
+    self.batch = {
       hash: {},
       read: [],
       write: [],
@@ -49,27 +51,28 @@
    * a new frame if need be.
    *
    * @param  {Function} fn
+   * @param ctx
    * @public
    */
-  FastDom.prototype.read = function(fn, ctx) {
-    var job = this.add('read', fn, ctx);
-    var id = job.id;
+  FastDom.prototype.read = function (fn, ctx) {
+    var
+      self = this,
+      job = self.add('read', fn, ctx),
+      id = job.id;
 
     // Add this job to the read queue
-    this.batch.read.push(job.id);
+    self.batch.read.push(id);
 
     // We should *not* schedule a new frame if:
     // 1. We're 'reading'
     // 2. A frame is already scheduled
-    var doesntNeedFrame = this.batch.mode === 'reading'
-      || this.batch.scheduled;
 
     // If a frame isn't needed, return
-    if (doesntNeedFrame) return id;
-
-    // Schedule a new
-    // frame, then return
-    this.scheduleBatch();
+    if (!(self.batch.mode === 'reading' || self.batch.scheduled)) {
+      // Schedule a new
+      // frame, then return
+      self.scheduleBatch();
+    }
     return id;
   };
 
@@ -79,30 +82,30 @@
    * a new frame if need be.
    *
    * @param  {Function} fn
+   * @param ctx
    * @public
    */
-  FastDom.prototype.write = function(fn, ctx) {
-    var job = this.add('write', fn, ctx);
-    var mode = this.batch.mode;
-    var id = job.id;
+  FastDom.prototype.write = function (fn, ctx) {
+    var
+      self = this,
+      job = self.add('write', fn, ctx),
+      mode = self.batch.mode,
+      id = job.id;
 
     // Push the job id into the queue
-    this.batch.write.push(job.id);
+    self.batch.write.push(id);
 
     // We should *not* schedule a new frame if:
     // 1. We are 'writing'
     // 2. We are 'reading'
     // 3. A frame is already scheduled.
-    var doesntNeedFrame = mode === 'writing'
-      || mode === 'reading'
-      || this.batch.scheduled;
 
     // If a frame isn't needed, return
-    if (doesntNeedFrame) return id;
-
-    // Schedule a new
-    // frame, then return
-    this.scheduleBatch();
+    if (!(mode === 'writing' || mode === 'reading' || self.batch.scheduled)) {
+      // Schedule a new
+      // frame, then return
+      self.scheduleBatch();
+    }
     return id;
   };
 
@@ -117,9 +120,10 @@
    *
    * @param  {Number}   frame
    * @param  {Function} fn
+   * @param ctx
    * @public
    */
-  FastDom.prototype.defer = function(frame, fn, ctx) {
+  FastDom.prototype.defer = function (frame, fn, ctx) {
 
     // Accepts two arguments
     if (typeof frame === 'function') {
@@ -128,10 +132,10 @@
       frame = 1;
     }
 
-    var self = this;
-    var index = frame - 1;
+    var self = this,
+      index = frame - 1;
 
-    return this.schedule(index, function() {
+    return self.schedule(index, function () {
       self.run({
         fn: fn,
         ctx: ctx
@@ -146,24 +150,24 @@
    * @param  {Number|String} id
    * @public
    */
-  FastDom.prototype.clear = function(id) {
-
+  FastDom.prototype.clear = function (id) {
+    var self = this;
     // Defer jobs are cleared differently
     if (typeof id === 'function') {
-      return this.clearFrame(id);
+      return self.clearFrame(id);
     }
 
     // Allow ids to be passed as strings
     id = Number(id);
 
-    var job = this.batch.hash[id];
+    var job = self.batch.hash[id];
     if (!job) return;
 
-    var list = this.batch[job.type];
-    var index = list.indexOf(id);
+    var list = self.batch[job.type],
+      index = list.indexOf(id);
 
     // Clear references
-    delete this.batch.hash[id];
+    delete self.batch.hash[id];
     if (~index) list.splice(index, 1);
   };
 
@@ -173,7 +177,7 @@
    * @param  {Function} frame
    * @private
    */
-  FastDom.prototype.clearFrame = function(frame) {
+  FastDom.prototype.clearFrame = function (frame) {
     var index = this.frames.indexOf(frame);
     if (~index) this.frames.splice(index, 1);
   };
@@ -184,18 +188,18 @@
    *
    * @private
    */
-  FastDom.prototype.scheduleBatch = function() {
+  FastDom.prototype.scheduleBatch = function () {
     var self = this;
 
     // Schedule batch for next frame
-    this.schedule(0, function() {
+    self.schedule(0, function () {
       self.batch.scheduled = false;
       self.runBatch();
     });
 
     // Set flag to indicate
     // a frame has been scheduled
-    this.batch.scheduled = true;
+    self.batch.scheduled = true;
   };
 
   /**
@@ -205,7 +209,7 @@
    * @return {Number}
    * @private
    */
-  FastDom.prototype.uniqueId = function() {
+  FastDom.prototype.uniqueId = function () {
     return ++this.lastId;
   };
 
@@ -221,7 +225,7 @@
    * @param  {Array} list
    * @private
    */
-  FastDom.prototype.flush = function(list) {
+  FastDom.prototype.flush = function (list) {
     var id;
 
     while (id = list.shift()) {
@@ -240,23 +244,24 @@
    *
    * @private
    */
-  FastDom.prototype.runBatch = function() {
+  FastDom.prototype.runBatch = function () {
+    var self = this;
     try {
 
       // Set the mode to 'reading',
       // then empty all read jobs
-      this.batch.mode = 'reading';
-      this.flush(this.batch.read);
+      self.batch.mode = 'reading';
+      self.flush(self.batch.read);
 
       // Set the mode to 'writing'
       // then empty all write jobs
-      this.batch.mode = 'writing';
-      this.flush(this.batch.write);
+      self.batch.mode = 'writing';
+      self.flush(self.batch.write);
 
-      this.batch.mode = null;
+      self.batch.mode = null;
 
     } catch (e) {
-      this.runBatch();
+      self.runBatch();
       throw e;
     }
   };
@@ -265,13 +270,13 @@
    * Adds a new job to
    * the given batch.
    *
-   * @param {Array}   list
+   * @param {Array} type
    * @param {Function} fn
    * @param {Object}   ctx
-   * @returns {Number} id
+   * @returns {{id: Number, fn: Function, ctx: Object, type: Array}} id
    * @private
    */
-  FastDom.prototype.add = function(type, fn, ctx) {
+  FastDom.prototype.add = function (type, fn, ctx) {
     var id = this.uniqueId();
     return this.batch.hash[id] = {
       id: id,
@@ -304,17 +309,17 @@
    * @param  {Object} job
    * @private
    */
-  FastDom.prototype.run = function(job){
-    var ctx = job.ctx || this;
-    var fn = job.fn;
+  FastDom.prototype.run = function (job) {
+    var self = this, ctx = job.ctx || self,
+      fn = job.fn;
 
     // Clear reference to the job
-    delete this.batch.hash[job.id];
+    delete self.batch.hash[job.id];
 
     // If no `onError` handler
     // has been registered, just
     // run the job normally.
-    if (!this.onError) {
+    if (!self.onError) {
       return fn.call(ctx);
     }
 
@@ -323,8 +328,10 @@
     // errors that throw inside
     // callbacks, and run the
     // handler instead.
-    try { fn.call(ctx); } catch (e) {
-      this.onError(e);
+    try {
+      fn.call(ctx);
+    } catch (e) {
+      self.onError(e);
     }
   };
 
@@ -334,12 +341,12 @@
    *
    * @private
    */
-  FastDom.prototype.loop = function() {
-    var self = this;
-    var raf = this.raf;
+  FastDom.prototype.loop = function () {
+    var self = this,
+      raf = self.rAF;
 
     // Don't start more than one loop
-    if (this.looping) return;
+    if (self.looping) return;
 
     raf(function frame() {
       var fn = self.frames.shift();
@@ -349,8 +356,8 @@
       if (!self.frames.length) {
         self.looping = false;
 
-      // Otherwise, schedule the
-      // next frame
+        // Otherwise, schedule the
+        // next frame
       } else {
         raf(frame);
       }
@@ -364,7 +371,7 @@
       if (fn) fn();
     });
 
-    this.looping = true;
+    self.looping = true;
   };
 
   /**
@@ -377,24 +384,24 @@
    * @return {Function}
    * @private
    */
-  FastDom.prototype.schedule = function(index, fn) {
-
+  FastDom.prototype.schedule = function (index, fn) {
+    var self = this;
     // Make sure this slot
     // hasn't already been
     // taken. If it has, try
     // re-scheduling for the next slot
-    if (this.frames[index]) {
-      return this.schedule(index + 1, fn);
+    if (self.frames[index]) {
+      return self.schedule(index + 1, fn);
     }
 
     // Start the rAF
     // loop to empty
     // the frame queue
-    this.loop();
+    self.loop();
 
     // Insert this function into
     // the frames queue and return
-    return this.frames[index] = fn;
+    return self.frames[index] = fn;
   };
 
   // We only ever want there to be
@@ -410,7 +417,7 @@
   } else if (typeof define === 'function' && define.amd) {
     define(function(){ return fastdom; });
   } else {
-    window['fastdom'] = fastdom;
+    _Window['fastdom'] = fastdom;
   }
 
 })(window.fastdom);

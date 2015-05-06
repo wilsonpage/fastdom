@@ -110,14 +110,14 @@ suite('defer', function(){
 
   test('Should run the next frame even if frame before it errors', function(done) {
     var fastdom = new FastDom();
-    var rafOld = fastdom.raf;
+    var rafOld = fastdom.rAF;
     var error = sinon.stub().throws();
     var callback = sinon.spy();
 
     // Wrap requestAnimationFrame method
     // so that we can catch any errors
     // that may be thrown in the callback
-    sinon.stub(fastdom, 'raf', function(fn) {
+    sinon.stub(fastdom, 'rAF', function(fn) {
       var wrapped = function() {
         try { fn(); } catch (e) {}
       };
@@ -138,7 +138,7 @@ suite('defer', function(){
 
   test('Should continue to run future jobs when the last frame errors', function(done) {
     var fastdom = new FastDom();
-    var rafOld = fastdom.raf;
+    var rafOld = fastdom.rAF;
     var error = sinon.stub().throws();
     var callback1 = sinon.spy();
     var callback2 = sinon.spy();
@@ -146,7 +146,7 @@ suite('defer', function(){
     // Wrap requestAnimationFrame method
     // so that we can catch any errors
     // that may be thrown in the callback
-    sinon.stub(fastdom, 'raf', function(fn) {
+    sinon.stub(fastdom, 'rAF', function(fn) {
       var wrapped = function() {
         try { fn(); } catch (e) {}
       };

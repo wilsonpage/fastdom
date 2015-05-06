@@ -1,4 +1,3 @@
-
 // RequestAnimationFrame Polyfill
 var raf = window.requestAnimationFrame
   || window.webkitRequestAnimationFrame
