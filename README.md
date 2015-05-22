@@ -3,7 +3,7 @@
 Eliminates layout thrashing by batching DOM read/write operations (~750 bytes gzipped).
 
 ```js
-fastdom.meaure(function() {
+fastdom.measure(function() {
   console.log('read');
 });
 
@@ -11,7 +11,7 @@ fastdom.mutate(function() {
   console.log('write');
 });
 
-fastdom.meaure(function() {
+fastdom.measure(function() {
   console.log('read');
 });
 
@@ -53,7 +53,7 @@ or [download](http://github.com/wilsonpage/fastdom/raw/master/index.js).
 
 FastDom works as a regulatory layer between your app/library and the DOM. By batching DOM access we **avoid unnecessary document reflows and speed up layout perfomance dramatically**.
 
-Each meaure/mutate job is added to a corresponding meaure/mutate queue. The queues are emptied (reads, then writes) at the turn of the next frame using [`window.requestAnimationFrame`](https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame).
+Each measure/mutate job is added to a corresponding measure/mutate queue. The queues are emptied (reads, then writes) at the turn of the next frame using [`window.requestAnimationFrame`](https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame).
 
 FastDom aims to behave like a singleton across *all* modules in your app. When any module requires `'fastdom'` they  get the same instance back, meaning FastDom can harmonize DOM access app-wide.
 
@@ -86,7 +86,7 @@ fastdom.mutate(function() {
 Clears **any** scheduled job.
 
 ```js
-var read = fastdom.meaure(function(){});
+var read = fastdom.measure(function(){});
 var write = fastdom.mutate(function(){});
 var defer = fastdom.defer(4, function(){});
 
