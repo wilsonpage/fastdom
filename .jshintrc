@@ -7,5 +7,7 @@
 	// Relaxing options
 	"boss": true,
 	"sub": true,
-	"laxbreak": true
+	"laxbreak": true,
+  "node": true,
+  "browser": true
 }

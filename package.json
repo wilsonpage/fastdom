@@ -2,9 +2,13 @@
   "name": "fastdom",
   "description": "Eliminates layout thrashing by batching DOM read/write operations",
   "version": "0.8.6",
-  "main": "index.js",
+  "main": "lib/fastdom.js",
   "scripts": {
-    "test": "jshint . && mocha-phantomjs test/index.html"
+    "test": "jshint . && mocha-phantomjs test/index.html",
+    "bundle": "browserify lib/fastdom.js > fastdom.js",
+    "compress": "uglifyjs fastdom.js --compress='drop_console,sequences,dead_code,booleans,conditionals,unused,if_return,join_vars,pure_funcs=\"debug\"' --mangle --reserved='require,define,module,exports' > fastdom.min.js",
+    "build": "npm run bundle && npm run compress && npm run lint",
+    "lint": "jshint lib/* && jscs lib/*"
   },
   "homepage": "https://github.com/wilsonpage/fastdom",
   "author": {
@@ -17,12 +21,19 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "mocha": "~1.12.0",
-    "jshint": "~2.1.0",
-    "sinon": "~1.7.3",
+    "browserify": "^10.2.1",
     "chai": "~1.7.2",
+    "jscs": "^1.13.1",
+    "jshint": "~2.1.0",
+    "mocha": "~1.12.0",
     "mocha-phantomjs": "~3.1.2",
     "phantomjs": "*",
-    "polyfill-function-prototype-bind": "0.0.1"
+    "polyfill-function-prototype-bind": "0.0.1",
+    "sinon": "~1.7.3",
+    "uglify-js": "^2.4.23"
+  },
+  "jscsConfig": {
+    "preset": "airbnb",
+    "requireCurlyBraces": null
   }
 }
