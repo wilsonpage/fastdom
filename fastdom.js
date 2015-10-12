@@ -12,7 +12,6 @@
  */
 
 'use strict';
-/* globals Promise */
 /**
  * Mini logger
  *
@@ -48,14 +47,6 @@ function FastDom() {
   // us to replace it with
   // a stub for testing.
   this.raf = raf.bind(window);
-  this.immediate = window.Promise && Promise.resolve ?
-    Promise.resolve() :
-    {
-      then: function(fn) {
-        setTimeout(fn, 0);
-      }
-    }
-  ;
   this._flush = this._flush.bind(this);
   this._flushReads = this._flushReads.bind(this);
   debug('initialized', this);
@@ -141,15 +132,10 @@ function scheduleReadFlush(fastdom) {
   if (fastdom.scheduledRead) return;
   fastdom.scheduledRead = true;
 
-  if (fastdom._isWriting) {
-    setTimeout(fastdom._flushReads, 0);
-  } else {
-    fastdom.immediate.then(fastdom._flushReads);
-
-    //in case we use setTimeout or a bad Promise polyfill, setTimeout can be called later than a rAF.
-    //by additionally using the ordinary scheduleFlush function we make sure that reads are called as early as possible.
-    scheduleFlush(fastdom);
-  }
+  //setTimeout can be called later than a rAF (especially when called inside a event handler).
+  //by additionally using the ordinary scheduleFlush function we make sure that reads are called as early as possible.
+  setTimeout(fastdom._flushReads, 0);
+  scheduleFlush(fastdom);
 
   debug('flushReads scheduled');
 }
@@ -196,10 +182,7 @@ FastDom.prototype._flush = function() {
   debug('flush');
 
   this._flushReads();
-
-  this._isWriting = true;
   this._flushList(this.writes);
-  this._isWriting = false;
 
   this.scheduled = false;
 };
