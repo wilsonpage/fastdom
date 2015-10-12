@@ -85,18 +85,21 @@ suite('fastdom', function() {
 
   test('Should call a read in the *next* frame if scheduled inside a write callback', function(done) {
     var cb = sinon.spy();
+    var cb2 = sinon.spy();
 
     fastdom.mutate(function() {
 
       // Schedule a callback for *next* frame
       raf(cb);
+      setTimeout(cb2);
 
       // Schedule a read that should be
       // called in the next frame, meaning
       // the test callback should have already
       // been called.
       fastdom.measure(function() {
-        assert(cb.called);
+        assert(!cb.called);
+        assert(cb2.called);
         done();
       }, this);
     }, this);
@@ -108,9 +111,6 @@ suite('fastdom', function() {
     fastdom.mutate(function() {
       fastdom.measure(function() {
 
-        // Schedule a callback for *next* frame
-        raf(callback);
-
         // Schedule a read callback
         // that should be run in the
         // current frame checking that
@@ -120,20 +120,24 @@ suite('fastdom', function() {
           assert(!callback.called);
           done();
         });
+
+        // Schedule a callback for *next* frame
+        raf(callback);
       });
     });
   });
 
   test('Should schedule a new frame when a read is requested in a nested write', function(done) {
-    fastdom.raf = sinon.spy(fastdom, 'raf');
+    var callback = sinon.spy();
 
     fastdom.measure(function() {
       fastdom.mutate(function() {
         fastdom.measure(function(){
           // Should have scheduled a new frame
-          assert(fastdom.raf.calledTwice);
+          assert(!callback.called);
           done();
         });
+        setTimeout(callback, 9);
       });
     });
   });
@@ -163,12 +167,14 @@ suite('fastdom', function() {
     fastdom.raf = sinon.spy(fastdom, 'raf');
 
     fastdom.mutate(function() {
+      raf(callback);
+      setTimeout(callback);
       fastdom.mutate(function() {
         fastdom.mutate(function() {
           fastdom.mutate(function() {
 
             // Should not have scheduled a new frame
-            assert(fastdom.raf.calledOnce);
+            assert(callback.notCalled);
             done();
           });
         });
