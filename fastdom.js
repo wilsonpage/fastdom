@@ -48,7 +48,7 @@ function FastDom() {
   // us to replace it with
   // a stub for testing.
   this.raf = raf.bind(window);
-  this.immediate = window.Promise && Promise.resolve ? Promise.resolve() : {then: setTimeout};
+  this.immediate = window.Promise && Promise.resolve ? Promise.resolve() : {then: function(fn){setTimeout(fn, 0);}};
   this._flush = this._flush.bind(this);
   this._flushReads = this._flushReads.bind(this);
   debug('initialized', this);
@@ -169,8 +169,6 @@ FastDom.prototype._flushList = function(taskList) {
 
   // If the batch errored we may still have tasks queued
   if (taskList.length) this._flushList(taskList);
-
-  this._isWriting = false;
 
   if (error) {
     if (this.catch) this.catch(error);
