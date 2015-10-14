@@ -54,9 +54,12 @@
 				async: function(m) {
 
 					// Use fastdom to batch the reads and writes with exactly the same code as the 'sync' routine
-					var top = movers[m].offsetTop;
-					fastdom.write(function() {
-						mover.setLeft(movers[m], top);
+					// We use fastdom.read because we are called by rAF.
+					fastdom.read(function(){
+						var top = movers[m].offsetTop;
+						fastdom.write(function() {
+							mover.setLeft(movers[m], top);
+						});
 					});
 				},
 				noread: function(m) {
