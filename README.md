@@ -63,7 +63,7 @@ Potentially a third-party library could depend on FastDom, and better integrate 
 
 ### FastDom#measure(callback[, context])
 
-Schedules a job for the 'measure' queue. Returns a unique ID that can be used to clear the scheduled job.
+Schedules a job for the 'measure' queue. Returns a unique ID that can be used to clear the scheduled job. Normally this is only needed if called inside of a 'mutate' function.
 
 ```js
 fastdom.measure(function() {

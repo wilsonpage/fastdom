@@ -18,14 +18,14 @@
 </style>
 </head>
 <body>
-  <label>Number of elements <input id="input" type="text" value="100" /></label>
+  <label>Number of elements <input id="input" type="number" value="400" min="100" /></label>
   <button id="withoutFastDom">Run without FastDom</button>
   <button id="withRequestAnimationFrame">Run with requestAnimationFrame</button>
   <button id="withFastDom">Run with FastDom</button>
   <button id="resetbtn">reset</button>
   <section id="perf"></section>
   <section id="container"></section>
-  <script type="text/javascript" src="../index.js"></script>
+  <script type="text/javascript" src="../fastdom.min.js"></script>
   <script>
     var n;
     var start;
@@ -62,17 +62,15 @@
       var isLast = i === (n - 1);
 
       // READ
+      var h = div.clientWidth * aspect;
+
+      // WRITE
       requestAnimationFrame(function() {
-        var h = div.clientWidth * aspect;
+        div.style.height = h + 'px';
 
-        // WRITE
-        requestAnimationFrame(function() {
-          div.style.height = h + 'px';
-
-          if (isLast) {
-            displayPerf(performance.now() - start);
-          }
-        });
+        if (isLast) {
+          displayPerf(performance.now() - start);
+        }
       });
     }
 
@@ -81,17 +79,15 @@
       var isLast = i === (n - 1);
 
       // READ
-      fastdom.read(function() {
-        var h = div.clientWidth * aspect;
+      var h = div.clientWidth * aspect;
 
-        // WRITE
-        fastdom.write(function() {
-          div.style.height = h + 'px';
+      // WRITE
+      fastdom.write(function() {
+        div.style.height = h + 'px';
 
-          if (isLast) {
-            displayPerf(performance.now() - start);
-          }
-        });
+        if (isLast) {
+          displayPerf(performance.now() - start);
+        }
       });
     }
 

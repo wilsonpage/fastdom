@@ -50,12 +50,13 @@ suite('fastdom', function() {
 
       // Schedule a callback for *next* frame
       raf(cb);
+      setTimeout(cb);
 
       // Schedule a read callback
       // that should be run in the
       // current frame checking that
-      // the RAF callback has not
-      // yet been fired.
+      // neither the RAF nor the timeout
+      // callback has not yet been fired.
       fastdom.measure(function() {
         assert(!cb.called);
         done();
@@ -85,31 +86,73 @@ suite('fastdom', function() {
 
   test('Should call a read in the *next* frame if scheduled inside a write callback', function(done) {
     var cb = sinon.spy();
+    var cb2 = sinon.spy();
 
     fastdom.mutate(function() {
 
       // Schedule a callback for *next* frame
       raf(cb);
+      setTimeout(cb2);
 
       // Schedule a read that should be
       // called in the next frame, meaning
       // the test callback should have already
       // been called.
       fastdom.measure(function() {
-        assert(cb.called);
+        assert(!cb.called);
+        assert(cb2.called);
         done();
       }, this);
     }, this);
   });
 
-  test('Should not request a new frame when a write is requested inside a nested read', function(done) {
+  test('Should optimally not call a read in rAF', function(done) {
+    var cb = sinon.spy();
+
+    raf(function(){
+      raf(cb);
+
+      fastdom.measure(function() {
+        assert(!cb.called);
+        done();
+      });
+    });
+  });
+
+  test('Should call a read always before next frame', function(done) {
+    var cb = sinon.spy();
+    var cb2 = sinon.spy();
+    var cb3 = sinon.spy();
+
+    setTimeout(function(){
+
+      fastdom.measure(function() {
+        assert(!cb.called);
+
+        setTimeout(function(){
+          fastdom.measure(function() {
+            assert(!cb2.called);
+            setTimeout(function(){
+              fastdom.measure(function() {
+                assert(!cb3.called);
+                done();
+              });
+              raf(cb3);
+            });
+          });
+          raf(cb2);
+        });
+      });
+
+      raf(cb);
+    });
+  });
+
+  test('Should request next frame when a write is requested inside a nested read', function(done) {
     var callback = sinon.spy();
 
     fastdom.mutate(function() {
       fastdom.measure(function() {
-
-        // Schedule a callback for *next* frame
-        raf(callback);
 
         // Schedule a read callback
         // that should be run in the
@@ -120,20 +163,26 @@ suite('fastdom', function() {
           assert(!callback.called);
           done();
         });
+
+        // Schedule a callback for *next* frame
+        raf(callback);
       });
     });
   });
 
   test('Should schedule a new frame when a read is requested in a nested write', function(done) {
-    fastdom.raf = sinon.spy(fastdom, 'raf');
+    var callback = sinon.spy();
 
     fastdom.measure(function() {
       fastdom.mutate(function() {
         fastdom.measure(function(){
           // Should have scheduled a new frame
-          assert(fastdom.raf.calledTwice);
+          assert(!callback.called);
           done();
         });
+
+        raf(callback);
+        setTimeout(callback, 9);
       });
     });
   });
@@ -144,12 +193,16 @@ suite('fastdom', function() {
     fastdom.raf = sinon.spy(fastdom, 'raf');
 
     fastdom.measure(function() {
+      setTimeout(callback);
+      raf(callback);
+
       fastdom.measure(function() {
         fastdom.measure(function() {
           fastdom.measure(function() {
 
             // Should not have scheduled a new frame
             assert(fastdom.raf.calledOnce);
+            assert(callback.notCalled);
             done();
           });
         });
@@ -163,12 +216,14 @@ suite('fastdom', function() {
     fastdom.raf = sinon.spy(fastdom, 'raf');
 
     fastdom.mutate(function() {
+      raf(callback);
+      setTimeout(callback);
       fastdom.mutate(function() {
         fastdom.mutate(function() {
           fastdom.mutate(function() {
 
             // Should not have scheduled a new frame
-            assert(fastdom.raf.calledOnce);
+            assert(callback.notCalled);
             done();
           });
         });
@@ -177,7 +232,6 @@ suite('fastdom', function() {
   });
 
   test('Should call a "read" callback with the given context', function(done) {
-    var cb = sinon.spy();
     var ctx = { foo: 'bar' };
 
     fastdom.measure(function() {
@@ -187,7 +241,6 @@ suite('fastdom', function() {
   });
 
   test('Should call a "write" callback with the given context', function(done) {
-    var cb = sinon.spy();
     var ctx = { foo: 'bar' };
 
     fastdom.mutate(function() {
@@ -254,10 +307,12 @@ suite('fastdom', function() {
     sinon.spy(fastdom, '_flush');
     fastdom.measure(callback);
 
-    raf(function() {
-      assert(callback.called);
-      assert(fastdom._flush.calledOnce);
-      done();
+    raf(function(){
+      raf(function() {
+        assert(callback.calledOnce);
+        assert(fastdom._flush.calledOnce);
+        done();
+      });
     });
   });
 
