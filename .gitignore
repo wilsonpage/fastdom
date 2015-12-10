@@ -1,2 +1,17 @@
-node_modules
+# OSX
 .DS_Store
+._*
+.Trashes
+
+# IDEA
+.idea/
+.iml
+
+# vim
+.*.s[a-w][a-z]
+*~
+.netrwhist
+
+# Node.js
+npm-debug.log
+.node_modules/

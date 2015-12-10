@@ -1,0 +1,11 @@
+test_page: test/index.html
+src_files:
+- test/*.js
+launch_in_ci:
+- Chrome
+- Firefox
+- Safari
+launch_in_dev:
+- Chrome
+- Firefox
+- Safari
