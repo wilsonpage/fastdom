@@ -64,12 +64,10 @@
     var doesntNeedFrame = this.batch.mode === 'reading'
       || this.batch.scheduled;
 
-    // If a frame isn't needed, return
-    if (doesntNeedFrame) return id;
-
-    // Schedule a new
-    // frame, then return
-    this.scheduleBatch();
+    // If a frame is needed schedule a new one
+    if (!doesntNeedFrame){
+      this.scheduleBatch();
+    }
     return id;
   };
 
