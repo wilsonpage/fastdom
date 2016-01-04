@@ -1,11 +1,38 @@
 {
-	// Enforcing options
-	"camelcase": true,
-	"curly": false,
-	"quotmark": "single",
+  "camelcase": false,
+  "forin": false,
+  "latedef": "nofunc",
+  "newcap": false,
+  "noarg": true,
+  "node": true,
+  "nonew": true,
+  "quotmark": "single",
+  "undef": true,
+  "unused": "vars",
+  "trailing": true,
+  "maxlen": 80,
+  "laxbreak": true,
+  "sub": true,
 
-	// Relaxing options
-	"boss": true,
-	"sub": true,
-	"laxbreak": true
+  "eqnull": true,
+  "expr": true,
+
+  "maxerr": 1000,
+  "regexdash": true,
+  "laxcomma": true,
+  "proto": true,
+  "boss": true,
+
+  "esnext": true,
+
+  "browser": true,
+  "devel": true,
+  "nonstandard": true,
+  "worker": true,
+
+  "-W078": true,
+
+  "predef": [
+    "define"
+  ]
 }

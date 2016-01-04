@@ -1,5 +1,20 @@
 language: node_js
+
 node_js:
-  - "0.10"
-script:
-  - "npm test"
+  - 5.1.0
+
+addons:
+  firefox: latest
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+
+before_script:
+  - export CHROME_BIN=$(which google-chrome-stable)
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
+after_script:
+  - npm run coveralls
