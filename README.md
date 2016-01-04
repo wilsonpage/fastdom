@@ -4,29 +4,29 @@ Eliminates layout thrashing by batching DOM read/write operations (580 bytes gzi
 
 ```js
 fastdom.measure(function() {
-  console.log('read');
+  console.log('measure');
 });
 
 fastdom.mutate(function() {
-  console.log('write');
+  console.log('mutate');
 });
 
 fastdom.measure(function() {
-  console.log('read');
+  console.log('measure');
 });
 
 fastdom.mutate(function() {
-  console.log('write');
+  console.log('mutate');
 });
 ```
 
 Outputs:
 
 ```
-read
-read
-write
-write
+measure
+measure
+mutate
+mutate
 ```
 
 ## Examples
@@ -49,7 +49,7 @@ or [download](http://github.com/wilsonpage/fastdom/raw/master/fastdom.js).
 
 ## How it works
 
-FastDom works as a regulatory layer between your app/library and the DOM. By batching DOM access we **avoid unnecessary document reflows** and dramatically **speed up layout perfomance**.
+FastDom works as a regulatory layer between your app/library and the DOM. By batching DOM access we **avoid unnecessary document reflows** and dramatically **speed up layout performance**.
 
 Each measure/mutate job is added to a corresponding measure/mutate queue. The queues are emptied (reads, then writes) at the turn of the next frame using [`window.requestAnimationFrame`](https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame).
 
@@ -114,7 +114,7 @@ fastdom.measure(function() { element.clientWidth; }); // does not throw
 
 > `fastdom-strict` will not throw if nodes are not attached to the document.
 
-You should use `fastdom-strict` in develelopment to catch rendering performance issues before they hit production. It is not advisable to use `fastdom-strict` in production.
+You should use `fastdom-strict` in development to catch rendering performance issues before they hit production. It is not advisable to use `fastdom-strict` in production.
 
 ## Exceptions
 
@@ -131,7 +131,7 @@ fastdom.catch = function(error) {
 
 ## Extensions
 
-The core fastdom library is designed to be as light as possible. Additional functionality can be bolted on in the form of 'extensions'. It's worth noting that Fastdom is a 'singleton' by design, so all tasks (even those scheduled by extensions) will reach the same global task queue.
+The core `fastdom` library is designed to be as light as possible. Additional functionality can be bolted on in the form of 'extensions'. It's worth noting that `fastdom` is a 'singleton' by design, so all tasks (even those scheduled by extensions) will reach the same global task queue.
 
 **Fastdom ships with some extensions:**
 
