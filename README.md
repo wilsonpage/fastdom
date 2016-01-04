@@ -112,9 +112,9 @@ fastdom.measure(function() { element.clientWidth; }); // does not throw
 "Error: Can only get .clientWidth during 'measure' phase"
 ```
 
-> `fastdom-strict` will not throw if nodes are not attached to the document.
-
-You should use `fastdom-strict` in development to catch rendering performance issues before they hit production. It is not advisable to use `fastdom-strict` in production.
+- `fastdom-strict` will not throw if nodes are not attached to the document.
+- You should use `fastdom-strict` in development to catch rendering performance issues before they hit production.
+- It is not advisable to use `fastdom-strict` in production.
 
 ## Exceptions
 
@@ -148,8 +148,10 @@ Use the `.extend()` method to extend the current `fastdom` to create a new objec
 ```
 
 ```js
+// extend fastdom
 var myFastdom = fastdom.extend(fastdomPromised);
 
+// use new api
 myFastdom.mutate(...).then(...);
 ```
 
