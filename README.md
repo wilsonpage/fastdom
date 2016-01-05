@@ -204,7 +204,7 @@ $ npm test
 ## Contributors
 
 - **Wilson Page** - [@wilsonpage](http://twitter.com/wilsonpage)
-- **Paul Irish** - [@paul_irish](http://github.com/paul_irish)
+- **Paul Irish** - [@paulirish](http://github.com/paulirish)
 - **Kornel Lesinski** - [@pornel](http://github.com/pornel)
 - **George Crawford** - [@georgecrawford](http://github.com/georgecrawford)
 
