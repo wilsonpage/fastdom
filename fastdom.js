@@ -106,9 +106,8 @@ FastDom.prototype = {
    * @example
    *
    * var myFastdom = fastdom.extend({
-   *   // called on creation
    *   initialize: function() {
-   *
+   *     // runs on creation
    *   },
    *
    *   // override a method
@@ -130,7 +129,7 @@ FastDom.prototype = {
     if (typeof props != 'object') throw new Error('expected object');
 
     var child = Object.create(this);
-    Object.assign(child, props);
+    mixin(child, props);
     child.fastdom = this;
 
     // run optional creation hook
@@ -151,7 +150,6 @@ FastDom.prototype = {
  *
  * @private
  */
-
 function scheduleFlush(fastdom) {
   if (!fastdom.scheduled) {
     fastdom.scheduled = true;
@@ -203,7 +201,6 @@ function flush(fastdom) {
  *
  * @private
  */
-
 function runTasks(tasks) {
   debug('run tasks');
   var task; while (task = tasks.shift()) task.fn.call(task.ctx);
@@ -219,6 +216,19 @@ function runTasks(tasks) {
 function remove(array, item) {
   var index = array.indexOf(item);
   return !!~index && !!array.splice(index, 1);
+}
+
+/**
+ * Mixin own properties of source
+ * object into the target.
+ *
+ * @param  {Object} target
+ * @param  {Object} source
+ */
+function mixin(target, source) {
+  for (var key in source) {
+    if (source.hasOwnProperty(key)) target[key] = source[key];
+  }
 }
 
 // There should never be more than
