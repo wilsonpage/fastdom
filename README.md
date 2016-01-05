@@ -1,6 +1,6 @@
 # fastdom [![Build Status](https://travis-ci.org/wilsonpage/fastdom.svg?branch=master)](https://travis-ci.org/wilsonpage/fastdom) [![Coverage Status](https://coveralls.io/repos/wilsonpage/fastdom/badge.svg?branch=master&service=github)](https://coveralls.io/github/wilsonpage/fastdom?branch=master)
 
-Eliminates layout thrashing by batching DOM read/write operations (580 bytes gzipped compressed).
+Eliminates layout thrashing by batching DOM read/write operations (~600 bytes minified gzipped).
 
 ```js
 fastdom.measure(function() {
