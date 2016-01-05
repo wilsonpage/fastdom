@@ -385,5 +385,13 @@ suite('fastdom', function() {
         fastdom.extend(999);
       });
     });
+
+    test('it only mixes in own properties', function() {
+      var proto = { foo: 'foo' };
+      var extension = Object.create(proto);
+      var extended = fastdom.extend(extension);
+
+      assert.isUndefined(extended.foo);
+    });
   });
 });
