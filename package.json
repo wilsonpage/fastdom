@@ -24,7 +24,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "browserify": "^10.2.1",
     "chai": "^3.4.1",
     "coveralls": "^2.11.6",
     "jshint": "^2.8.0",
