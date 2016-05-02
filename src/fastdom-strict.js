@@ -8,7 +8,9 @@ var fastdom = require('../fastdom');
  *
  * @return {Function}
  */
-var debug = 0 ? console.log.bind(console, '[fastdom-strict]') : function() {};
+var debug = process.env.NODE_ENV !== 'production' ?
+  console.log.bind(console, '[fastdom-strict]') : 
+  function() {};
 
 /**
  * Enabled state

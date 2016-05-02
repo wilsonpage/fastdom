@@ -18,7 +18,7 @@
  *
  * @return {Function}
  */
-var debug = 0 ? console.log.bind(console, '[fastdom]') : function() {};
+var debug = process.env.NODE_ENV !== 'production' ? console.log.bind(console, '[fastdom]') : function() {};
 
 /**
  * Normalized rAF

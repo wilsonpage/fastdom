@@ -64,7 +64,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @return {Function}
 	 */
-	var debug = 0 ? console.log.bind(console, '[fastdom-strict]') : function() {};
+	var debug =  false ? console.log.bind(console, '[fastdom-strict]') : function() {};
 
 	/**
 	 * Enabled state
