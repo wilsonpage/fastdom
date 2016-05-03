@@ -60,7 +60,7 @@ function create(promised, type, fn, ctx) {
   var promise = new Promise(function(resolve, reject) {
     task = fastdom[type](function() {
       tasks.delete(promise);
-      try { resolve(fn()); }
+      try { resolve(fn.call(ctx)); }
       catch (e) { reject(e); }
     }, ctx);
   });
