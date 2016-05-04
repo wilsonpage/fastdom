@@ -1,3 +1,6 @@
+sudo: required
+dist: trusty
+
 language: node_js
 
 node_js:

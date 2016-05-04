@@ -45,4 +45,14 @@ suite('fastdom-promised', function() {
       done();
     });
   });
+
+  test('it calls callback with given context', function() {
+    var spy = sinon.spy();
+    var ctx = {};
+
+    return fastdom.measure(spy, ctx)
+      .then(function() {
+        sinon.assert.calledOn(spy, ctx);
+      });
+  });
 });
