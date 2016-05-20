@@ -1,3 +1,5 @@
+var webpack = require('webpack');
+
 module.exports = [
   {
     entry: './src/fastdom-strict.js',
@@ -9,6 +11,14 @@ module.exports = [
 
     externals: {
       '../fastdom': 'fastdom'
-    }
+    },
+    
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env': {
+          'NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+        }
+      })
+    ]
   }
 ];

@@ -10,7 +10,7 @@
     "test-dev": "karma start test/karma.conf.js --browsers Firefox",
     "coveralls": "cat test/coverage/lcov.info | coveralls",
     "compress": "uglifyjs fastdom.js --compress='drop_console,sequences,dead_code,booleans,conditionals,unused,if_return,join_vars,pure_funcs=\"debug\"' --mangle --reserved='require,define,module,exports' > fastdom.min.js",
-    "build": "webpack && npm run -s compress",
+    "build": "NODE_ENV=production webpack && npm run -s compress",
     "watch": "webpack -w"
   },
   "homepage": "https://github.com/wilsonpage/fastdom",
