@@ -43,6 +43,7 @@ module.exports = function(config) {
     },
 
     files: [
+      'test/globals.js',
       'fastdom.js',
       'extensions/fastdom-promised.js',
       'extensions/fastdom-sandbox.js',
