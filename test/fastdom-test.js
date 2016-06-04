@@ -340,7 +340,7 @@ suite('fastdom', function() {
 
     test('it removes reference to the job if cleared', function(done) {
       var write = sinon.spy();
-      var id = fastdom.mutate(2, write);
+      var id = fastdom.mutate(function () { return false; }, write);
 
       fastdom.clear(id);
 
