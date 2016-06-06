@@ -56,7 +56,7 @@ FastDom.prototype = {
    */
   measure: function(fn, ctx) {
     debug('measure');
-    var task = { fn: fn, ctx: ctx };
+    var task = !ctx ? fn : fn.bind(ctx);
     this.reads.push(task);
     scheduleFlush(this);
     return task;
@@ -72,7 +72,7 @@ FastDom.prototype = {
    */
   mutate: function(fn, ctx) {
     debug('mutate');
-    var task = { fn: fn, ctx: ctx };
+    var task = !ctx ? fn : fn.bind(ctx);
     this.writes.push(task);
     scheduleFlush(this);
     return task;
@@ -203,7 +203,7 @@ function flush(fastdom) {
  */
 function runTasks(tasks) {
   debug('run tasks');
-  var task; while (task = tasks.shift()) task.fn.call(task.ctx);
+  var task; while (task = tasks.shift()) task();
 }
 
 /**
