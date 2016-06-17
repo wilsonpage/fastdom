@@ -68,7 +68,7 @@ Sandbox.prototype.measure = function(fn, ctx) {
   var tasks = this.tasks;
   var task = this.fastdom.measure(function() {
     tasks.splice(tasks.indexOf(task));
-    fn.call(ctx);
+    return fn.call(ctx);
   });
 
   tasks.push(task);
@@ -86,7 +86,7 @@ Sandbox.prototype.mutate = function(fn, ctx) {
   var tasks = this.tasks;
   var task = this.fastdom.mutate(function() {
     tasks.splice(tasks.indexOf(task));
-    fn.call(ctx);
+    return fn.call(ctx);
   });
 
   this.tasks.push(task);
