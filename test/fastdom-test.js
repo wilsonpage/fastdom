@@ -190,6 +190,60 @@ suite('fastdom', function() {
     }, { foo: 'bar' });
   });
 
+  test('it passes the given argument to a "read" callback without context', function(done) {
+    fastdom.measure(function(arg) {
+      assert.equal(arg, 'bar');
+      done();
+    }, null, 'bar');
+  });
+
+  test('it passes the given argument to a "write" callback without context', function(done) {
+    fastdom.mutate(function(arg) {
+      assert.equal(arg, 'bar');
+      done();
+    }, null, 'bar');
+  });
+
+  test('it passes the given argument to a "read" callback with context', function(done) {
+    fastdom.measure(function(arg) {
+      assert.equal(this.foo, 'bar');
+      assert.equal(arg, 'baz');
+      done();
+    }, { foo: 'bar' }, 'baz');
+  });
+
+  test('it passes the given argument to a "write" callback with context', function(done) {
+    fastdom.mutate(function(arg) {
+      assert.equal(this.foo, 'bar');
+      assert.equal(arg, 'baz');
+      done();
+    }, { foo: 'bar' }, 'baz');
+  });
+
+  test('it maintains the passed argument value in a "read" callback inside a loop', function(done) {
+    var i = 2;
+    do {
+      if ( i === 1 ) {
+        fastdom.measure(function ( arg ) {
+          assert.equal(arg, 1);
+          done();
+        }, null, i);
+      }
+    } while ( i-- );
+  });
+
+  test('it maintains the passed argument value in a "write" callback inside a loop', function(done) {
+    var i = 2;
+    do {
+      if ( i === 1 ) {
+        fastdom.mutate(function ( arg ) {
+          assert.equal(arg, 1);
+          done();
+        }, null, i);
+      }
+    } while ( i-- );
+  });
+
   test('it has an empty job hash when batch complete', function(done) {
     var ran = 0;
 
