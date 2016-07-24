@@ -52,11 +52,15 @@ FastDom.prototype = {
    * schedules a new frame if need be.
    *
    * @param  {Function} fn
+   * @param  {Object}   ctx
+   * @param  arg - Optional argument passed to task
    * @public
    */
-  measure: function(fn, ctx) {
+  measure: function(fn, ctx, arg) {
     debug('measure');
-    var task = !ctx ? fn : fn.bind(ctx);
+    var task;
+    if ( !ctx ) task = !arg ? fn : fn.bind(null, arg);
+    else task = fn.bind(ctx, arg);
     this.reads.push(task);
     scheduleFlush(this);
     return task;
@@ -68,11 +72,15 @@ FastDom.prototype = {
    * a new frame if need be.
    *
    * @param  {Function} fn
+   * @param  {Object}   ctx
+   * @param  arg - Optional argument passed to task
    * @public
    */
-  mutate: function(fn, ctx) {
+  mutate: function(fn, ctx, arg) {
     debug('mutate');
-    var task = !ctx ? fn : fn.bind(ctx);
+    var task;
+    if ( !ctx ) task = !arg ? fn : fn.bind(null, arg);
+    else task = fn.bind(ctx, arg);
     this.writes.push(task);
     scheduleFlush(this);
     return task;
