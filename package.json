@@ -41,6 +41,6 @@
     "webpack": "^1.12.9"
   },
   "dependencies": {
-    "strictdom": "^1.0.0"
+    "strictdom": "^1.0.1"
   }
 }

@@ -239,4 +239,4 @@ var exports = win.fastdom = (win.fastdom || new FastDom()); // jshint ignore:lin
 if ((typeof define)[0] == 'f') define(function() { return exports; });
 else if ((typeof module)[0] == 'o') module.exports = exports;
 
-})(this);
+})( window || this);
