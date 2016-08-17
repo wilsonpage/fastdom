@@ -45,6 +45,7 @@ function FastDom() {
 }
 
 FastDom.prototype = {
+  version: 1,
   constructor: FastDom,
 
   /**
@@ -231,12 +232,48 @@ function mixin(target, source) {
   }
 }
 
-// There should never be more than
-// one instance of `FastDom` in an app
-var exports = win.fastdom = (win.fastdom || new FastDom()); // jshint ignore:line
+/**
+ * Exports
+ *
+ * In order for fastdom to work in the most
+ * performant way it must be a global singleton
+ * within each app. If two fastdom's are operating
+ * at the same time, they can collide and force
+ * additional reflows.
+ *
+ * To circumvent this we:
+ *
+ * 1. Check for any pre-existing `fastdom`
+ * 2. Test if the major versions are the same
+ * 3. If compatible, we export the existing instance
+ * 4. If not compatible we console.warn and create a new instance
+ *
+ * This assumes that instances of the same semver
+ * major version have the same public API. Any
+ * minor or patch versions are disregarded.
+ * The first fastdom loaded wins.
+ */
 
-// Expose to CJS & AMD
+var exports = (function() {
+  var existing = win['fastdom'] || win['__fastdom__'];
+
+  if (existing) {
+    var version = existing.version || (existing.defer ? 0 : 1);
+    var compatible = version === FastDom.prototype.version;
+    var exports = compatible ? existing : new FastDom();
+    if (compatible) return existing;
+    console.warn('[fastdom] Multiple incompatible versions detected (this could impact performance)');
+  }
+
+  return new FastDom();
+})();
+
+// Expose to CJS, AMD or window
 if ((typeof define)[0] == 'f') define(function() { return exports; });
 else if ((typeof module)[0] == 'o') module.exports = exports;
+else win['fastdom'] = exports;
+
+// Expose 'hidden' global
+win['__fastdom__'] = exports;
 
 })( window || this);
