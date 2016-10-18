@@ -1,21 +1,22 @@
-# fastdom [![Build Status](https://travis-ci.org/wilsonpage/fastdom.svg?branch=master)](https://travis-ci.org/wilsonpage/fastdom) [![Coverage Status](https://coveralls.io/repos/wilsonpage/fastdom/badge.svg?branch=master&service=github)](https://coveralls.io/github/wilsonpage/fastdom?branch=master)
+# fastdom [![Build Status](https://travis-ci.org/wilsonpage/fastdom.svg?branch=master)](https://travis-ci.org/wilsonpage/fastdom) [![NPM version](https://badge.fury.io/js/fastdom.svg)](http://badge.fury.io/js/fastdom) [![Dependency Status](https://img.shields.io/david/wilsonpage/fastdom.svg)](https://david-dm.org/wilsonpage/fastdom) [![npm](https://img.shields.io/npm/dm/fastdom.svg?maxAge=2592000)]() [![Coverage Status](https://coveralls.io/repos/wilsonpage/fastdom/badge.svg?branch=master&service=github)](https://coveralls.io/github/wilsonpage/fastdom?branch=master)
+
 
 Eliminates layout thrashing by batching DOM read/write operations (~600 bytes minified gzipped).
 
 ```js
-fastdom.measure(function() {
+fastdom.measure(() => {
   console.log('measure');
 });
 
-fastdom.mutate(function() {
+fastdom.mutate(() => {
   console.log('mutate');
 });
 
-fastdom.measure(function() {
+fastdom.measure(() => {
   console.log('measure');
 });
 
-fastdom.mutate(function() {
+fastdom.mutate(() => {
   console.log('mutate');
 });
 ```
@@ -39,10 +40,7 @@ mutate
 FastDom is CommonJS and AMD compatible, you can install it in one of the following ways:
 
 ```sh
-$ npm install fastdom
-```
-```sh
-$ bower install fastdom
+$ npm install fastdom --save
 ```
 
 or [download](http://github.com/wilsonpage/fastdom/raw/master/fastdom.js).
@@ -64,8 +62,8 @@ Potentially a third-party library could depend on FastDom, and better integrate 
 Schedules a job for the 'measure' queue. Returns a unique ID that can be used to clear the scheduled job.
 
 ```js
-fastdom.measure(function() {
-  var width = element.clientWidth;
+fastdom.measure(() => {
+  const width = element.clientWidth;
 });
 ```
 
@@ -74,7 +72,7 @@ fastdom.measure(function() {
 Schedules a job for the 'mutate' queue. Returns a unique ID that can be used to clear the scheduled job.
 
 ```js
-fastdom.mutate(function() {
+fastdom.mutate(() => {
   element.style.width = width + 'px';
 });
 ```
@@ -84,8 +82,8 @@ fastdom.mutate(function() {
 Clears **any** scheduled job.
 
 ```js
-var read = fastdom.measure(function(){});
-var write = fastdom.mutate(function(){});
+const read = fastdom.measure(() => {});
+const write = fastdom.mutate(() => {});
 
 fastdom.clear(read);
 fastdom.clear(write);
@@ -123,7 +121,7 @@ FastDom is async, this can therefore mean that when a job comes around to being 
 FastDom allows you to register an `catch` handler. If `fastdom.catch` has been registered, FastDom will catch any errors that occur in your jobs, and run the handler instead.
 
 ```js
-fastdom.catch = function(error) {
+fastdom.catch = (error) => {
   // Do something if you want
 };
 
@@ -149,7 +147,7 @@ Use the `.extend()` method to extend the current `fastdom` to create a new objec
 
 ```js
 // extend fastdom
-var myFastdom = fastdom.extend(fastdomPromised);
+const myFastdom = fastdom.extend(fastdomPromised);
 
 // use new api
 myFastdom.mutate(...).then(...);
@@ -158,7 +156,7 @@ myFastdom.mutate(...).then(...);
 Extensions can be chained to construct a fully customised `fastdom`.
 
 ```js
-var myFastdom = fastdom
+const myFastdom = fastdom
   .extend(fastdomPromised)
   .extend(fastdomSandbox);
 ```
@@ -166,8 +164,8 @@ var myFastdom = fastdom
 ### Writing an extension
 
 ```js
-var myFastdom = fastdom.extend({
-  measure: function(fn, ctx) {
+const myFastdom = fastdom.extend({
+  measure(fn, ctx) {
     // do custom stuff ...
 
     // then call the parent method
