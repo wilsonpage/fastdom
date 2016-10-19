@@ -1,4 +1,4 @@
-# fastdom [![Build Status](https://travis-ci.org/wilsonpage/fastdom.svg?branch=master)](https://travis-ci.org/wilsonpage/fastdom) [![NPM version](https://badge.fury.io/js/fastdom.svg)](http://badge.fury.io/js/fastdom) [![Dependency Status](https://img.shields.io/david/wilsonpage/fastdom.svg)](https://david-dm.org/wilsonpage/fastdom) [![npm](https://img.shields.io/npm/dm/fastdom.svg?maxAge=2592000)]() [![Coverage Status](https://coveralls.io/repos/wilsonpage/fastdom/badge.svg?branch=master&service=github)](https://coveralls.io/github/wilsonpage/fastdom?branch=master)
+# fastdom [![Build Status](https://travis-ci.org/wilsonpage/fastdom.svg?branch=master)](https://travis-ci.org/wilsonpage/fastdom) [![NPM version](https://badge.fury.io/js/fastdom.svg)](http://badge.fury.io/js/fastdom) [![npm](https://img.shields.io/npm/dm/fastdom.svg?maxAge=2592000)]() [![Coverage Status](https://coveralls.io/repos/wilsonpage/fastdom/badge.svg?branch=master&service=github)](https://coveralls.io/github/wilsonpage/fastdom?branch=master)
 
 
 Eliminates layout thrashing by batching DOM read/write operations (~600 bytes minified gzipped).
