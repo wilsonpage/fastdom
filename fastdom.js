@@ -236,7 +236,7 @@ function mixin(target, source) {
 var exports = win.fastdom = (win.fastdom || new FastDom()); // jshint ignore:line
 
 // Expose to CJS & AMD
-if ((typeof define)[0] == 'f') define(function() { return exports; });
-else if ((typeof module)[0] == 'o') module.exports = exports;
+if ((typeof define) == 'function') define(function() { return exports; });
+else if ((typeof module) == 'object') module.exports = exports;
 
 })( typeof window !== 'undefined' ? window : this);
