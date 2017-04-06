@@ -39,7 +39,7 @@ var exports = {
     var tasks = this._tasks;
     var task = tasks.get(promise);
     this.fastdom.clear(task);
-    tasks.delete(task);
+    tasks.delete(promise);
   }
 };
 
