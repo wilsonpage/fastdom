@@ -2,6 +2,7 @@
 /*jshint maxlen:false*/
 
 suite('fastdom-strict', function() {
+  var raf = window.requestAnimationFrame;
   var fastdom;
   var el;
 
@@ -74,5 +75,22 @@ suite('fastdom-strict', function() {
     fastdom.measure(function() {
       el.clientWidth;
     }).then(done);
+  });
+
+  test('callback is called with correct context when measuring and mutating', function(done) {
+    var ctx1 = { foo: 'bar' };
+    var ctx2 = { bar: 'baz' };
+
+    var spy1 = sinon.spy();
+    var spy2 = sinon.spy();
+
+    fastdom.measure(spy1, ctx1);
+    fastdom.mutate(spy2, ctx2);
+
+    raf(function() {
+      assert(spy1.calledOn(ctx1));
+      assert(spy2.calledOn(ctx2));
+      done();
+    });
   });
 });

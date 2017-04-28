@@ -18,16 +18,18 @@ var debug = 0 ? console.log.bind(console, '[fastdom-strict]') : function() {};
 var enabled = false;
 
 window.fastdom = module.exports = fastdom.extend({
-  measure: function(task, ctx) {
+  measure: function(fn, ctx) {
     debug('measure');
+    var task = !ctx ? fn : fn.bind(ctx);
     return this.fastdom.measure(function() {
       if (!enabled) return task();
       return strictdom.phase('measure', task);
     }, ctx);
   },
 
-  mutate: function(task, ctx) {
+  mutate: function(fn, ctx) {
     debug('mutate');
+    var task = !ctx ? fn : fn.bind(ctx);
     return this.fastdom.mutate(function() {
       if (!enabled) return task();
       return strictdom.phase('mutate', task);
