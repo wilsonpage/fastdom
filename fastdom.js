@@ -52,6 +52,7 @@ FastDom.prototype = {
    * schedules a new frame if need be.
    *
    * @param  {Function} fn
+   * @param  {Object} ctx the context to be bound to `fn` (optional).
    * @public
    */
   measure: function(fn, ctx) {
@@ -68,6 +69,7 @@ FastDom.prototype = {
    * a new frame if need be.
    *
    * @param  {Function} fn
+   * @param  {Object} ctx the context to be bound to `fn` (optional).
    * @public
    */
   mutate: function(fn, ctx) {
