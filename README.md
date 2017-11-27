@@ -118,7 +118,7 @@ fastdom.measure(function() { element.clientWidth; }); // does not throw
 
 FastDom is async, this can therefore mean that when a job comes around to being executed, the node you were working with may no longer be there. These errors are usually not critical, but they can cripple your app.
 
-FastDom allows you to register an `catch` handler. If `fastdom.catch` has been registered, FastDom will catch any errors that occur in your jobs, and run the handler instead.
+FastDom allows you to register a `catch` handler. If `fastdom.catch` has been registered, FastDom will catch any errors that occur in your jobs, and run the handler instead.
 
 ```js
 fastdom.catch = (error) => {
