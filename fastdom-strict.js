@@ -52,7 +52,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -74,16 +74,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	var enabled = false;
 
 	window.fastdom = module.exports = fastdom.extend({
-	  measure: function(task, ctx) {
+	  measure: function(fn, ctx) {
 	    debug('measure');
+	    var task = !ctx ? fn : fn.bind(ctx);
 	    return this.fastdom.measure(function() {
 	      if (!enabled) return task();
 	      return strictdom.phase('measure', task);
 	    }, ctx);
 	  },
 
-	  mutate: function(task, ctx) {
+	  mutate: function(fn, ctx) {
 	    debug('mutate');
+	    var task = !ctx ? fn : fn.bind(ctx);
 	    return this.fastdom.mutate(function() {
 	      if (!enabled) return task();
 	      return strictdom.phase('mutate', task);
@@ -105,9 +107,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	window.fastdom.strict(true);
 
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(function() {
 	'use strict';
@@ -948,13 +950,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
 
-/***/ }
+/***/ })
 /******/ ])
 });
 ;
