@@ -1,7 +1,7 @@
 {
   "name": "fastdom",
   "description": "Eliminates layout thrashing by batching DOM read/write operations",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "fastdom.js",
   "types": "fastdom.d.ts",
   "scripts": {
