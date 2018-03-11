@@ -14,6 +14,8 @@
 				height: 100px;
 				width: 100px;
 				position: absolute;
+				/*20% fps boost as described here https://developers.google.com/web/fundamentals/performance/rendering/simplify-paint-complexity-and-reduce-paint-areas/ */
+				will-change: transform;
 			}
 
 			button.active {
