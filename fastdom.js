@@ -48,6 +48,19 @@ FastDom.prototype = {
   constructor: FastDom,
 
   /**
+   * We run this inside a try catch
+   * so that if any jobs error, we
+   * are able to recover and continue
+   * to flush the batch until it's empty.
+   *
+   * @param {Array} tasks
+   */
+  runTasks: function(tasks) {
+    debug('run tasks');
+    var task; while (task = tasks.shift()) task();
+  },
+
+  /**
    * Adds a job to the read batch and
    * schedules a new frame if need be.
    *
@@ -178,9 +191,9 @@ function flush(fastdom) {
 
   try {
     debug('flushing reads', reads.length);
-    runTasks(reads);
+    fastdom.runTasks(reads);
     debug('flushing writes', writes.length);
-    runTasks(writes);
+    fastdom.runTasks(writes);
   } catch (e) { error = e; }
 
   fastdom.scheduled = false;
@@ -193,19 +206,6 @@ function flush(fastdom) {
     if (fastdom.catch) fastdom.catch(error);
     else throw error;
   }
-}
-
-/**
- * We run this inside a try catch
- * so that if any jobs error, we
- * are able to recover and continue
- * to flush the batch until it's empty.
- *
- * @private
- */
-function runTasks(tasks) {
-  debug('run tasks');
-  var task; while (task = tasks.shift()) task();
 }
 
 /**
