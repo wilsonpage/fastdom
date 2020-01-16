@@ -1,4 +1,4 @@
-# fastdom [![Twitter Follow](https://img.shields.io/twitter/follow/wilsonpage?style=social)]
+# fastdom ![Twitter Follow](https://img.shields.io/twitter/follow/wilsonpage?style=social)
 
 ---
 
