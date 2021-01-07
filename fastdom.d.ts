@@ -5,6 +5,7 @@ declare class Fastdom {
   extend<T extends object>(props: T): Omit<this, keyof T & keyof this> & T;
   measure<T extends () => void>(task: T, context?: any): T;
   mutate<T extends () => void>(task: T, context?: any): T;
+  catch: null | ((e: unknown) => any);
 }
 
 declare const fastdom: Fastdom
