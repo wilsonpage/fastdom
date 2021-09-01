@@ -10,4 +10,4 @@ declare class Fastdom {
 
 declare const fastdom: Fastdom
 
-export = fastdom;
+export default fastdom;
