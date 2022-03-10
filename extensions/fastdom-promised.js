@@ -48,7 +48,7 @@ var exports = {
  * a 'cancellable' Promise.
  *
  * @param  {FastDom}  fastdom
- * @param  {String}   type - 'measure'|'muatate'
+ * @param  {String}   type - 'measure'|'mutate'
  * @param  {Function} fn
  * @return {Promise}
  */
