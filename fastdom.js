@@ -241,4 +241,4 @@ var exports = win.fastdom = (win.fastdom || new FastDom()); // jshint ignore:lin
 if ((typeof define) == 'function') define(function() { return exports; });
 else if ((typeof module) == 'object') module.exports = exports;
 
-})( typeof window !== 'undefined' ? window : this);
+})( typeof window !== 'undefined' ? window : typeof this != 'undefined' ? this : globalThis);
