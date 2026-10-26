@@ -188,21 +188,22 @@ function flush(fastdom) {
   var writes = fastdom.writes;
   var reads = fastdom.reads;
   var error;
+  var hasError = false;
 
   try {
     debug('flushing reads', reads.length);
     fastdom.runTasks(reads);
     debug('flushing writes', writes.length);
     fastdom.runTasks(writes);
-  } catch (e) { error = e; }
+  } catch (e) { error = e; hasError = true; }
 
   fastdom.scheduled = false;
 
   // If the batch errored we may still have tasks queued
   if (reads.length || writes.length) scheduleFlush(fastdom);
 
-  if (error) {
-    debug('task errored', error.message);
+  if (hasError) {
+    debug('task errored', error);
     if (fastdom.catch) fastdom.catch(error);
     else throw error;
   }

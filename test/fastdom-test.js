@@ -23,6 +23,36 @@ suite('fastdom', function() {
     fastdom.mutate(write);
   });
 
+  test('it reports falsy thrown values to catch', function() {
+    var flush;
+    fastdom.raf = function(callback) { flush = callback; };
+    var caught = sinon.spy();
+    fastdom.catch = caught;
+
+    [undefined, null, false, 0, ''].forEach(function(value) {
+      fastdom.measure(function() { throw value; });
+      flush();
+      sinon.assert.calledWithExactly(caught, value);
+      caught.reset();
+    });
+  });
+
+  test('it rethrows falsy values without a catch handler', function() {
+    var flush;
+    fastdom.raf = function(callback) { flush = callback; };
+
+    [undefined, null, false, 0, ''].forEach(function(value) {
+      var thrown = false;
+      fastdom.measure(function() { throw value; });
+      try { flush(); }
+      catch (error) {
+        thrown = true;
+        assert.strictEqual(error, value);
+      }
+      assert.isTrue(thrown);
+    });
+  });
+
   test('it calls all reads together, followed by all writes', function(done) {
     var read1 = sinon.spy();
     var read2 = sinon.spy();
